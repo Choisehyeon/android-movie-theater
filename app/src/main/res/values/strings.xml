@@ -1,3 +1,32 @@
 <resources>
     <string name="app_name">Movie</string>
+    <string name="date_format">yyyy.M.d</string>
+    <string name="time_format">HH:mm</string>
+    <string name="movie_running_date">상영일: %s ~ %s</string>
+    <string name="movie_running_time">러닝타임: %d분</string>
+    <string name="now_booking">지금 예매</string>
+    <string name="minus">-</string>
+    <string name="plus">+</string>
+    <string name="select_seat">좌석 선택</string>
+    <string name="ticket_message">영화 상영 시작 시간 15분 전까지\n 취소가 가능합니다.</string>
+    <string name="ticket_info">일반 %d명 | %s</string>
+    <string name="ticket_price">%d원 (현장 결제)</string>
+    <string name="ticket_price_seat_page">%d원</string>
+    <string name="seats_size_over_error">지정한 좌석 수를 초과합니다.</string>
+    <string name="screen">SCREEN</string>
+    <string name="enter">확인</string>
+    <string name="seat_dialog_title">예매 확인</string>
+    <string name="seat_dialog_message">정말 예매하시겠습니까?</string>
+    <string name="seat_dialog_yes">예</string>
+    <string name="seat_dialog_no">아니오</string>
+    <string name="reservation_datetime">%s | %s</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="push_alarm">푸시 알림 수신</string>
+    <string name="push_alarm_message">해제하면 푸시 알림을 수신할 수 없습니다.</string>
+    <string name="channel_name">영화 예매 알림</string>
+    <string name="channel_text">영화 예매 %d분 전에 알림이 울리도록 하는 기능</string>
+    <string name="notification_title">예매 알림</string>
+    <string name="notification_text">%s %d분 후에 상영</string>
+    <string name="check_notification">권한이 있어야 알림 기능을 사용할 수 있습니다.</string>
 </resources>

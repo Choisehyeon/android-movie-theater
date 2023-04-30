@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/history"
+        android:title="예매 내역"
+        android:icon="@drawable/booking"/>
+    <item
+        android:id="@+id/home"
+        android:title="홈"
+        android:icon="@drawable/home"/>
+    <item
+        android:id="@+id/setting"
+        android:title="설정"
+        android:icon="@drawable/setting"/>
+</menu>
