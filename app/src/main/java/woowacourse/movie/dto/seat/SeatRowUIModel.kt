@@ -2,7 +2,7 @@ package woowacourse.movie.dto.seat
 
 import woowacourse.movie.R
 
-data class SeatRowDto(val row: Char) : java.io.Serializable {
+data class SeatRowUIModel(val row: Char) : java.io.Serializable {
 
     fun getColor(): Int {
         return when (row) {
@@ -13,6 +13,6 @@ data class SeatRowDto(val row: Char) : java.io.Serializable {
     }
 
     companion object {
-        fun of(row: Int): SeatRowDto = SeatRowDto((row + 64).toChar())
+        fun of(row: Int): SeatRowUIModel = SeatRowUIModel((row + 64).toChar())
     }
 }

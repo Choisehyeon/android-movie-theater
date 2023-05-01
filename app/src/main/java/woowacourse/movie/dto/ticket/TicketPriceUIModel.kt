@@ -2,7 +2,7 @@ package woowacourse.movie.dto.ticket
 
 import java.io.Serializable
 
-data class TicketPriceDto(
+data class TicketPriceUIModel(
     val price: Int = TICKET_PRICE,
 ) : Serializable {
 

@@ -11,18 +11,24 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import woowacourse.movie.PermissionManager
 import woowacourse.movie.R
+import woowacourse.movie.SettingPreference
 import woowacourse.movie.fragment.HistoryFragment
 import woowacourse.movie.fragment.HomeFragment
 import woowacourse.movie.fragment.SettingFragment
 
 class MainActivity : AppCompatActivity() {
 
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) { isGranted: Boolean -> SettingPreference.setSetting(this, isGranted) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        requestNotificationPermission()
+        PermissionManager.requestNotificationPermission(this, requestPermissionLauncher)
         onClickBottomNavItem()
     }
 
@@ -69,8 +75,4 @@ class MainActivity : AppCompatActivity() {
             else -> {}
         }
     }
-
-    val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission(),
-    ) { isGranted: Boolean -> }
 }
