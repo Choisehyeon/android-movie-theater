@@ -18,10 +18,6 @@ import woowacourse.movie.movielist.OnClickListener
 
 class HomeFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     private fun setUpMovieDatas(view: View) {
         val movieRV = view.findViewById<RecyclerView>(R.id.movie_rv)
         val movieRVAdapter = MovieRecyclerViewAdapter(
@@ -60,10 +56,12 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
+        return inflater.inflate(R.layout.fragment_home, container, false)
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setUpMovieDatas(view)
-        return view
     }
 
     companion object {
