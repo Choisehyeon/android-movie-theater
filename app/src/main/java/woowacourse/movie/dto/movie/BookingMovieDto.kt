@@ -9,4 +9,15 @@ data class BookingMovieDto(
     val time: MovieTimeDto,
     val ticketCount: TicketCountDto,
     val seats: SeatsDto,
-) : java.io.Serializable
+) : java.io.Serializable {
+
+    companion object {
+        val bookingMovie = BookingMovieDto(
+            movie = MovieDto.movieData,
+            date = MovieDateDto.movieDate,
+            time = MovieTimeDto.movieTime,
+            ticketCount = TicketCountDto(0),
+            seats = SeatsDto(),
+        )
+    }
+}

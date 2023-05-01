@@ -13,4 +13,16 @@ data class MovieDto(
     val runningTime: Int,
     val description: String,
     @DrawableRes val moviePoster: Int,
-) : Serializable
+) : Serializable {
+    companion object {
+        val movieData = MovieDto(
+            viewType = ViewType.MOVIE_VIEW,
+            title = "",
+            startDate = LocalDate.now(),
+            endDate = LocalDate.now(),
+            runningTime = 0,
+            description = "",
+            moviePoster = 0,
+        )
+    }
+}
