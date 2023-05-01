@@ -4,7 +4,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import woowacourse.movie.R
-import woowacourse.movie.dto.movie.MovieDto
+import woowacourse.movie.dto.movie.MovieUIModel
 import woowacourse.movie.movielist.OnClickListener
 import java.time.format.DateTimeFormatter
 
@@ -25,14 +25,14 @@ class MovieViewHolder(
         }
     }
 
-    fun bind(movie: MovieDto) {
+    fun bind(movie: MovieUIModel) {
         moviePoster.setImageResource(movie.moviePoster)
         movieTitle.text = movie.title
         movieDate.text = formatMovieRunningDate(movie)
         runningTime.text = formatMovieRunningTime(movie)
     }
 
-    private fun formatMovieRunningDate(item: MovieDto): String {
+    private fun formatMovieRunningDate(item: MovieUIModel): String {
         val startDate =
             item.startDate.format(DateTimeFormatter.ofPattern(view.context.getString(R.string.date_format)))
         val endDate =
@@ -40,7 +40,7 @@ class MovieViewHolder(
         return view.context.getString(R.string.movie_running_date, startDate, endDate)
     }
 
-    private fun formatMovieRunningTime(item: MovieDto): String {
+    private fun formatMovieRunningTime(item: MovieUIModel): String {
         return view.context.getString(R.string.movie_running_time).format(item.runningTime)
     }
 }

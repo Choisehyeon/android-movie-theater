@@ -4,12 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import woowacourse.movie.R
-import woowacourse.movie.dto.movie.BookingMovieDto
+import woowacourse.movie.dto.movie.BookingMovieUIModel
 import woowacourse.movie.movielist.OnClickListener
 
 class HistoryRecyclerViewAdapter(
-    private val histories: List<BookingMovieDto>,
-    private val onItemClickListener: OnClickListener<BookingMovieDto>,
+    private val histories: List<BookingMovieUIModel>,
+    private val onItemClickListener: OnClickListener<BookingMovieUIModel>,
 ) :
     RecyclerView.Adapter<HistoryViewHolder>() {
 

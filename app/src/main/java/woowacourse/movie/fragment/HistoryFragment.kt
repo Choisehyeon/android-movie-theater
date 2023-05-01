@@ -9,15 +9,15 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import woowacourse.movie.R
 import woowacourse.movie.activity.TicketActivity
-import woowacourse.movie.dto.BookingHistoryDto
-import woowacourse.movie.dto.movie.BookingMovieDto
+import woowacourse.movie.dto.BookingHistoryUIModel
+import woowacourse.movie.dto.movie.BookingMovieUIModel
 import woowacourse.movie.history.HistoryRecyclerViewAdapter
 import woowacourse.movie.movielist.OnClickListener
 
 class HistoryFragment : Fragment() {
 
-    private val onItemClick = object : OnClickListener<BookingMovieDto> {
-        override fun onClick(item: BookingMovieDto) {
+    private val onItemClick = object : OnClickListener<BookingMovieUIModel> {
+        override fun onClick(item: BookingMovieUIModel) {
             val intent = Intent(context, TicketActivity::class.java)
             intent.putExtra(BOOKING_MOVIE_KEY, item)
             startActivity(intent)
@@ -40,7 +40,7 @@ class HistoryFragment : Fragment() {
     private fun setUpHistoryDatas(view: View) {
         val historyRecyclerView = view.findViewById<RecyclerView>(R.id.history_rv)
         val historyRVAdapter = HistoryRecyclerViewAdapter(
-            BookingHistoryDto.getHistory(),
+            BookingHistoryUIModel.getHistory(),
             onItemClick,
         )
 

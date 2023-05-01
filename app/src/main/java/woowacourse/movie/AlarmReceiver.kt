@@ -16,7 +16,7 @@ import androidx.core.app.NotificationManagerCompat
 import woowacourse.movie.activity.MainActivity
 import woowacourse.movie.activity.SeatSelectionActivity.Companion.BOOKING_MOVIE_KEY
 import woowacourse.movie.activity.TicketActivity
-import woowacourse.movie.dto.movie.BookingMovieDto
+import woowacourse.movie.dto.movie.BookingMovieUIModel
 
 class AlarmReceiver : BroadcastReceiver() {
 
@@ -24,7 +24,7 @@ class AlarmReceiver : BroadcastReceiver() {
         if (intent.action == ALARM_CODE && SettingPreference.getSetting(context)) {
             createNotificationChannel(context)
 
-            val bookingMovie = intent.getSerializableExtra(BOOKING_MOVIE_KEY) as BookingMovieDto
+            val bookingMovie = intent.getSerializableExtra(BOOKING_MOVIE_KEY) as BookingMovieUIModel
             Log.d(BOOKING_MOVIE_KEY, bookingMovie.toString())
 
             createNotificationBuilder(context, bookingMovie)
@@ -33,7 +33,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
     private fun createNotificationPendingIntent(
         context: Context,
-        bookingMovie: BookingMovieDto,
+        bookingMovie: BookingMovieUIModel,
     ): PendingIntent {
         val ticketIntent =
             Intent(context, TicketActivity::class.java).putExtra(BOOKING_MOVIE_KEY, bookingMovie)
@@ -62,7 +62,7 @@ class AlarmReceiver : BroadcastReceiver() {
         notificationManager.createNotificationChannel(channel)
     }
 
-    private fun createNotificationBuilder(context: Context, bookingMovie: BookingMovieDto) {
+    private fun createNotificationBuilder(context: Context, bookingMovie: BookingMovieUIModel) {
         val builder = NotificationCompat.Builder(context, CHANNEL_ID).apply {
             setSmallIcon(R.drawable.cute_android)
             setContentTitle(context.getString(R.string.notification_title))

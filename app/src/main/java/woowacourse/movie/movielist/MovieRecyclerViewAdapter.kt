@@ -6,14 +6,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import woowacourse.movie.R
-import woowacourse.movie.dto.AdDto
-import woowacourse.movie.dto.movie.MovieDto
+import woowacourse.movie.dto.AdUIModel
+import woowacourse.movie.dto.movie.MovieUIModel
 
 class MovieRecyclerViewAdapter(
-    private val movies: List<MovieDto>,
-    private val ad: AdDto,
-    private val onMovieItemClickListener: OnClickListener<MovieDto>,
-    private val onAdItemClickListener: OnClickListener<AdDto>,
+    private val movies: List<MovieUIModel>,
+    private val ad: AdUIModel,
+    private val onMovieItemClickListener: OnClickListener<MovieUIModel>,
+    private val onAdItemClickListener: OnClickListener<AdUIModel>,
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -60,7 +60,7 @@ class MovieRecyclerViewAdapter(
         return movies.size + 1
     }
 
-    private fun getMovieItem(position: Int): MovieDto =
+    private fun getMovieItem(position: Int): MovieUIModel =
         movies[position - (position / DIVIDE_MOVIE_VIEW)]
 
     companion object {

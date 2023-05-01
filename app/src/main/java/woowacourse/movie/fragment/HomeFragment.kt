@@ -10,24 +10,24 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import woowacourse.movie.R
 import woowacourse.movie.activity.MovieDetailActivity
-import woowacourse.movie.dto.AdDto
-import woowacourse.movie.dto.movie.MovieDto
+import woowacourse.movie.dto.AdUIModel
+import woowacourse.movie.dto.movie.MovieUIModel
 import woowacourse.movie.dto.movie.MovieDummy
 import woowacourse.movie.movielist.MovieRecyclerViewAdapter
 import woowacourse.movie.movielist.OnClickListener
 
 class HomeFragment : Fragment() {
 
-    private val movieItemClick = object : OnClickListener<MovieDto> {
-        override fun onClick(item: MovieDto) {
+    private val movieItemClick = object : OnClickListener<MovieUIModel> {
+        override fun onClick(item: MovieUIModel) {
             val intent = Intent(context, MovieDetailActivity::class.java)
             intent.putExtra(MOVIE_KEY, item)
             startActivity(intent)
         }
     }
 
-    private val adItemClick = object : OnClickListener<AdDto> {
-        override fun onClick(item: AdDto) {
+    private val adItemClick = object : OnClickListener<AdUIModel> {
+        override fun onClick(item: AdUIModel) {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
             startActivity(intent)
         }
@@ -50,7 +50,7 @@ class HomeFragment : Fragment() {
         val movieRV = view.findViewById<RecyclerView>(R.id.movie_rv)
         val movieRVAdapter = MovieRecyclerViewAdapter(
             MovieDummy.movieDatas,
-            AdDto.getAdData(),
+            AdUIModel.getAdData(),
             movieItemClick,
             adItemClick,
         )

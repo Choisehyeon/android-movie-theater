@@ -18,19 +18,18 @@ import domain.movieinfo.MovieTime
 import domain.screeningschedule.ReservationDate
 import domain.screeningschedule.ReservationTime
 import woowacourse.movie.R
-import woowacourse.movie.dto.movie.MovieDateDto
-import woowacourse.movie.dto.movie.MovieDto
-import woowacourse.movie.dto.ticket.TicketCountDto
-import woowacourse.movie.mapper.movie.mapToMovieDateDto
-import woowacourse.movie.mapper.movie.mapToMovieTimeDto
-import woowacourse.movie.mapper.ticket.mapToTicketCount
-import woowacourse.movie.mapper.ticket.mapToTicketCountDto
+import woowacourse.movie.dto.movie.MovieDateUIModel
+import woowacourse.movie.dto.movie.MovieUIModel
+import woowacourse.movie.dto.ticket.TicketCountUIModel
+import woowacourse.movie.mapper.movie.mapToUIModel
+import woowacourse.movie.mapper.ticket.mapToDomain
+import woowacourse.movie.mapper.ticket.mapToUIModel
 import woowacourse.movie.util.Extensions.intentSerializable
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class MovieDetailActivity : AppCompatActivity() {
-    private var movieTikcet = TicketCountDto()
+    private var movieTikcet = TicketCountUIModel()
     private var dateSpinnerPosition = 0
     private var timeSpinnerPosition = 0
 
@@ -44,7 +43,7 @@ class MovieDetailActivity : AppCompatActivity() {
         setToolBar()
         setUpState(savedInstanceState)
 
-        val movie = intent.intentSerializable(MOVIE_KEY, MovieDto::class.java) ?: MovieDto.movieData
+        val movie = intent.intentSerializable(MOVIE_KEY, MovieUIModel::class.java) ?: MovieUIModel.movieData
 
         setDateSpinner(movie.startDate, movie.endDate)
         setUpMovieData(movie)
@@ -66,7 +65,7 @@ class MovieDetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    private fun setUpMovieData(movie: MovieDto) {
+    private fun setUpMovieData(movie: MovieUIModel) {
         val moviePoster = findViewById<ImageView>(R.id.movie_poster)
         val movieTitle = findViewById<TextView>(R.id.movie_title)
         val movieDate = findViewById<TextView>(R.id.movie_date)
@@ -82,7 +81,7 @@ class MovieDetailActivity : AppCompatActivity() {
         description.text = movie.description
     }
 
-    private fun formatMovieRunningDate(item: MovieDto): String {
+    private fun formatMovieRunningDate(item: MovieUIModel): String {
         val startDate =
             item.startDate.format(DateTimeFormatter.ofPattern(getString(R.string.date_format)))
         val endDate =
@@ -101,8 +100,8 @@ class MovieDetailActivity : AppCompatActivity() {
         val minusBtn = findViewById<Button>(R.id.minus_button)
 
         minusBtn.setOnClickListener {
-            val ticketDecrease = movieTikcet.mapToTicketCount().decrease()
-            movieTikcet = ticketDecrease.mapToTicketCountDto()
+            val ticketDecrease = movieTikcet.mapToDomain().decrease()
+            movieTikcet = ticketDecrease.mapToUIModel()
             booker.text = movieTikcet.numberOfPeople.toString()
         }
     }
@@ -111,13 +110,13 @@ class MovieDetailActivity : AppCompatActivity() {
         val plusBtn = findViewById<Button>(R.id.plus_button)
 
         plusBtn.setOnClickListener {
-            val ticketIncrease = movieTikcet.mapToTicketCount().increase()
-            movieTikcet = ticketIncrease.mapToTicketCountDto()
+            val ticketIncrease = movieTikcet.mapToDomain().increase()
+            movieTikcet = ticketIncrease.mapToUIModel()
             booker.text = movieTikcet.numberOfPeople.toString()
         }
     }
 
-    private fun onClickBookBtnListener(movie: MovieDto) {
+    private fun onClickBookBtnListener(movie: MovieUIModel) {
         val bookBtn = findViewById<Button>(R.id.book_button)
         bookBtn.setOnClickListener {
             val selectedDate = MovieDate.of(selectDateSpinner.selectedItem.toString())
@@ -125,8 +124,8 @@ class MovieDetailActivity : AppCompatActivity() {
             val intent = Intent(this, SeatSelectionActivity::class.java)
             intent.putExtra(TICKET_KEY, movieTikcet)
             intent.putExtra(MOVIE_KEY, movie)
-            intent.putExtra(DATE_KEY, selectedDate.mapToMovieDateDto())
-            intent.putExtra(TIME_KEY, selectedTime.mapToMovieTimeDto())
+            intent.putExtra(DATE_KEY, selectedDate.mapToUIModel())
+            intent.putExtra(TIME_KEY, selectedTime.mapToUIModel())
             startActivity(intent)
             finish()
         }
@@ -155,7 +154,7 @@ class MovieDetailActivity : AppCompatActivity() {
             ) {
                 setTimeSpinner(
                     MovieDate.of(selectDateSpinner.getItemAtPosition(position) as String)
-                        .mapToMovieDateDto(),
+                        .mapToUIModel(),
                 )
             }
 
@@ -164,7 +163,7 @@ class MovieDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun setTimeSpinner(selectedDay: MovieDateDto) {
+    private fun setTimeSpinner(selectedDay: MovieDateUIModel) {
         selectTimeSpinner.adapter = getTimeSpinnerAdapter(selectedDay)
         selectTimeSpinner.setSelection(timeSpinnerPosition)
 
@@ -197,7 +196,7 @@ class MovieDetailActivity : AppCompatActivity() {
         return dateAdapter
     }
 
-    private fun getTimeSpinnerAdapter(selectedDay: MovieDateDto): ArrayAdapter<String> {
+    private fun getTimeSpinnerAdapter(selectedDay: MovieDateUIModel): ArrayAdapter<String> {
         val timeAdapter = ArrayAdapter(
             this,
             android.R.layout.simple_spinner_item,
