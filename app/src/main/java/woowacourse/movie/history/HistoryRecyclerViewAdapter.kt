@@ -9,10 +9,15 @@ import woowacourse.movie.movielist.OnClickListener
 
 class HistoryRecyclerViewAdapter(
     private val histories: List<BookingMovieDto>,
+    private val onItemClickListener: OnClickListener<BookingMovieDto>,
 ) :
     RecyclerView.Adapter<HistoryViewHolder>() {
 
-    lateinit var itemViewClick: OnClickListener<BookingMovieDto>
+    private val itemViewClick = object : OnClickListener<Int> {
+        override fun onClick(item: Int) {
+            onItemClickListener.onClick(histories[item])
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
         val view = LayoutInflater.from(parent.context)
