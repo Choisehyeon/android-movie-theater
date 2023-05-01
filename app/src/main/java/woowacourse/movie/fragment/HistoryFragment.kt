@@ -16,6 +16,14 @@ import woowacourse.movie.movielist.OnClickListener
 
 class HistoryFragment : Fragment() {
 
+    private val onItemClick = object : OnClickListener<BookingMovieDto> {
+        override fun onClick(item: BookingMovieDto) {
+            val intent = Intent(context, TicketActivity::class.java)
+            intent.putExtra(BOOKING_MOVIE_KEY, item)
+            startActivity(intent)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -33,17 +41,10 @@ class HistoryFragment : Fragment() {
         val historyRecyclerView = view.findViewById<RecyclerView>(R.id.history_rv)
         val historyRVAdapter = HistoryRecyclerViewAdapter(
             BookingHistoryDto.getHistory(),
+            onItemClick,
         )
 
         historyRecyclerView.adapter = historyRVAdapter
-        historyRVAdapter.notifyDataSetChanged()
-        historyRVAdapter.itemViewClick = object : OnClickListener<BookingMovieDto> {
-            override fun onClick(item: BookingMovieDto) {
-                val intent = Intent(context, TicketActivity::class.java)
-                intent.putExtra(BOOKING_MOVIE_KEY, item)
-                startActivity(intent)
-            }
-        }
     }
 
     companion object {
