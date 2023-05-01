@@ -21,6 +21,7 @@ import woowacourse.movie.dto.seat.SeatsDto
 import woowacourse.movie.dto.ticket.TicketCountDto
 import woowacourse.movie.mapper.seat.mapToSeats
 import woowacourse.movie.mapper.seat.mapToSeatsDto
+import woowacourse.movie.util.Extensions.intentSerializable
 import woowacourse.movie.view.SeatSelectView
 import java.time.LocalDateTime
 
@@ -28,10 +29,10 @@ class SeatSelectionActivity : AppCompatActivity() {
 
     private var seats = Seats()
 
-    private val date by lazy { intent.getSerializableExtra(DATE_KEY) as MovieDateDto }
-    private val time by lazy { intent.getSerializableExtra(TIME_KEY) as MovieTimeDto }
-    private val movie by lazy { intent.getSerializableExtra(MOVIE_KEY) as MovieDto }
-    private val ticketCount by lazy { intent.getSerializableExtra(TICKET_KEY) as TicketCountDto }
+    private val date by lazy { intent.intentSerializable(DATE_KEY, MovieDateDto::class.java) ?: MovieDateDto.movieDate }
+    private val time by lazy { intent.intentSerializable(TIME_KEY, MovieTimeDto::class.java) ?: MovieTimeDto.movieTime  }
+    private val movie by lazy {  intent.intentSerializable(MOVIE_KEY, MovieDto::class.java) ?: MovieDto.movieData}
+    private val ticketCount by lazy { intent.intentSerializable(TICKET_KEY, TicketCountDto::class.java) ?: TicketCountDto(0) }
     private val enterBtn by lazy { findViewById<TextView>(R.id.enterBtn) }
     private val movieAlarmManager by lazy { MovieAlarmManager(this) }
     private val alarmReceiver by lazy { AlarmReceiver() }
