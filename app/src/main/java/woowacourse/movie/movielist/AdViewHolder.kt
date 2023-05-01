@@ -6,14 +6,16 @@ import androidx.recyclerview.widget.RecyclerView
 import woowacourse.movie.R
 import woowacourse.movie.dto.AdDto
 
-class AdViewHolder(private val view: View, private val onAdClickListener: OnClickListener<AdDto>) :
+class AdViewHolder(private val view: View, private val onItemClickListener: OnClickListener<Int>) :
     RecyclerView.ViewHolder(view) {
-    val adImg = itemView.findViewById<ImageView>(R.id.ad)
+    private val adImg = itemView.findViewById<ImageView>(R.id.ad)
+    init {
+        adImg.setOnClickListener {
+            onItemClickListener.onClick(absoluteAdapterPosition)
+        }
+    }
 
     fun bind(item: AdDto) {
         adImg.setImageResource(item.adImage)
-        adImg.setOnClickListener {
-            onAdClickListener.onClick(item)
-        }
     }
 }

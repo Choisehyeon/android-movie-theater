@@ -10,24 +10,26 @@ import java.time.format.DateTimeFormatter
 
 class MovieViewHolder(
     private val view: View,
-    private val onMovieClickListener: OnClickListener<MovieDto>,
+    private val onItemClickListener: OnClickListener<Int>,
 ) :
     RecyclerView.ViewHolder(view) {
-    val moviePoster: ImageView = itemView.findViewById(R.id.movie_poster)
-    val movieTitle: TextView = itemView.findViewById(R.id.movie_title)
-    val movieDate: TextView = itemView.findViewById(R.id.movie_date)
-    val runningTime: TextView = itemView.findViewById(R.id.running_time)
-    val bookButton: Button = itemView.findViewById(R.id.book_button)
+    private val moviePoster: ImageView = itemView.findViewById(R.id.movie_poster)
+    private val movieTitle: TextView = itemView.findViewById(R.id.movie_title)
+    private val movieDate: TextView = itemView.findViewById(R.id.movie_date)
+    private val runningTime: TextView = itemView.findViewById(R.id.running_time)
+    private val bookButton: Button = itemView.findViewById(R.id.book_button)
+
+    init {
+        bookButton.setOnClickListener {
+            onItemClickListener.onClick(adapterPosition)
+        }
+    }
 
     fun bind(movie: MovieDto) {
         moviePoster.setImageResource(movie.moviePoster)
         movieTitle.text = movie.title
         movieDate.text = formatMovieRunningDate(movie)
         runningTime.text = formatMovieRunningTime(movie)
-
-        bookButton.setOnClickListener {
-            onMovieClickListener.onClick(movie)
-        }
     }
 
     private fun formatMovieRunningDate(item: MovieDto): String {

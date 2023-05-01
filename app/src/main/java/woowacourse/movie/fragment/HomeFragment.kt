@@ -18,36 +18,18 @@ import woowacourse.movie.movielist.OnClickListener
 
 class HomeFragment : Fragment() {
 
-    private fun setUpMovieDatas(view: View) {
-        val movieRV = view.findViewById<RecyclerView>(R.id.movie_rv)
-        val movieRVAdapter = MovieRecyclerViewAdapter(
-            MovieDummy.movieDatas,
-            AdDto.getAdData(),
-        )
-
-        movieRV.adapter = movieRVAdapter
-        onMovieItemClickListener(movieRVAdapter)
-        onAdItemClickListener(movieRVAdapter)
-
-        movieRVAdapter.notifyDataSetChanged()
-    }
-
-    private fun onMovieItemClickListener(adapter: MovieRecyclerViewAdapter) {
-        adapter.itemMovieClick = object : OnClickListener<MovieDto> {
-            override fun onClick(item: MovieDto) {
-                val intent = Intent(context, MovieDetailActivity::class.java)
-                intent.putExtra(MOVIE_KEY, item)
-                startActivity(intent)
-            }
+    private val movieItemClick = object : OnClickListener<MovieDto> {
+        override fun onClick(item: MovieDto) {
+            val intent = Intent(context, MovieDetailActivity::class.java)
+            intent.putExtra(MOVIE_KEY, item)
+            startActivity(intent)
         }
     }
 
-    private fun onAdItemClickListener(adapter: MovieRecyclerViewAdapter) {
-        adapter.itemAdClick = object : OnClickListener<AdDto> {
-            override fun onClick(item: AdDto) {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
-                startActivity(intent)
-            }
+    private val adItemClick = object : OnClickListener<AdDto> {
+        override fun onClick(item: AdDto) {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
+            startActivity(intent)
         }
     }
 
@@ -62,6 +44,17 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpMovieDatas(view)
+    }
+
+    private fun setUpMovieDatas(view: View) {
+        val movieRV = view.findViewById<RecyclerView>(R.id.movie_rv)
+        val movieRVAdapter = MovieRecyclerViewAdapter(
+            MovieDummy.movieDatas,
+            AdDto.getAdData(),
+            movieItemClick,
+            adItemClick,
+        )
+        movieRV.adapter = movieRVAdapter
     }
 
     companion object {
