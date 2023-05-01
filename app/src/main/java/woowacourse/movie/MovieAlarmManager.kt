@@ -5,7 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import woowacourse.movie.activity.SeatSelectionActivity
-import woowacourse.movie.dto.movie.BookingMovieDto
+import woowacourse.movie.dto.movie.BookingMovieUIModel
 import java.time.LocalDateTime
 import java.time.ZoneId
 
@@ -13,7 +13,7 @@ class MovieAlarmManager(val context: Context) {
 
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-    fun putAlarm(bookingMovie: BookingMovieDto) {
+    fun putAlarm(bookingMovie: BookingMovieUIModel) {
         alarmManager.setExact(
             AlarmManager.RTC_WAKEUP,
             setAlarmTime(bookingMovie),
@@ -21,7 +21,7 @@ class MovieAlarmManager(val context: Context) {
         )
     }
 
-    private fun setAlarmTime(bookingMovie: BookingMovieDto): Long {
+    private fun setAlarmTime(bookingMovie: BookingMovieUIModel): Long {
         val date = bookingMovie.date.date
         val time = bookingMovie.time.time
 
@@ -30,7 +30,7 @@ class MovieAlarmManager(val context: Context) {
         return movieDateTime.minusMinutes(30).atZone(timeZone).toInstant().toEpochMilli()
     }
 
-    private fun createReceiverPendingIntent(bookingMovie: BookingMovieDto): PendingIntent {
+    private fun createReceiverPendingIntent(bookingMovie: BookingMovieUIModel): PendingIntent {
         return Intent(context, AlarmReceiver::class.java).let {
             it.action = AlarmReceiver.ALARM_CODE
             it.putExtra(SeatSelectionActivity.BOOKING_MOVIE_KEY, bookingMovie)

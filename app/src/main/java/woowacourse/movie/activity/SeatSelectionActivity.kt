@@ -12,15 +12,15 @@ import domain.Seats
 import woowacourse.movie.AlarmReceiver
 import woowacourse.movie.MovieAlarmManager
 import woowacourse.movie.R
-import woowacourse.movie.dto.BookingHistoryDto
-import woowacourse.movie.dto.movie.BookingMovieDto
-import woowacourse.movie.dto.movie.MovieDateDto
-import woowacourse.movie.dto.movie.MovieDto
-import woowacourse.movie.dto.movie.MovieTimeDto
-import woowacourse.movie.dto.seat.SeatsDto
-import woowacourse.movie.dto.ticket.TicketCountDto
-import woowacourse.movie.mapper.seat.mapToSeats
-import woowacourse.movie.mapper.seat.mapToSeatsDto
+import woowacourse.movie.dto.BookingHistoryUIModel
+import woowacourse.movie.dto.movie.BookingMovieUIModel
+import woowacourse.movie.dto.movie.MovieDateUIModel
+import woowacourse.movie.dto.movie.MovieUIModel
+import woowacourse.movie.dto.movie.MovieTimeUIModel
+import woowacourse.movie.dto.seat.SeatsUIModel
+import woowacourse.movie.dto.ticket.TicketCountUIModel
+import woowacourse.movie.mapper.seat.mapToDomain
+import woowacourse.movie.mapper.seat.mapToUIModel
 import woowacourse.movie.util.Extensions.intentSerializable
 import woowacourse.movie.view.SeatSelectView
 import java.time.LocalDateTime
@@ -29,10 +29,10 @@ class SeatSelectionActivity : AppCompatActivity() {
 
     private var seats = Seats()
 
-    private val date by lazy { intent.intentSerializable(DATE_KEY, MovieDateDto::class.java) ?: MovieDateDto.movieDate }
-    private val time by lazy { intent.intentSerializable(TIME_KEY, MovieTimeDto::class.java) ?: MovieTimeDto.movieTime  }
-    private val movie by lazy {  intent.intentSerializable(MOVIE_KEY, MovieDto::class.java) ?: MovieDto.movieData}
-    private val ticketCount by lazy { intent.intentSerializable(TICKET_KEY, TicketCountDto::class.java) ?: TicketCountDto(0) }
+    private val date by lazy { intent.intentSerializable(DATE_KEY, MovieDateUIModel::class.java) ?: MovieDateUIModel.movieDate }
+    private val time by lazy { intent.intentSerializable(TIME_KEY, MovieTimeUIModel::class.java) ?: MovieTimeUIModel.movieTime  }
+    private val movie by lazy {  intent.intentSerializable(MOVIE_KEY, MovieUIModel::class.java) ?: MovieUIModel.movieData}
+    private val ticketCount by lazy { intent.intentSerializable(TICKET_KEY, TicketCountUIModel::class.java) ?: TicketCountUIModel(0) }
     private val enterBtn by lazy { findViewById<TextView>(R.id.enterBtn) }
     private val movieAlarmManager by lazy { MovieAlarmManager(this) }
     private val alarmReceiver by lazy { AlarmReceiver() }
@@ -61,8 +61,8 @@ class SeatSelectionActivity : AppCompatActivity() {
 
     private fun setUpState(savedInstanceState: Bundle?) {
         if (savedInstanceState != null) {
-            val seatsDto = savedInstanceState.getSerializable(SEATS_POSITION) as SeatsDto
-            seats = seatsDto.mapToSeats()
+            val seatsDto = savedInstanceState.getSerializable(SEATS_POSITION) as SeatsUIModel
+            seats = seatsDto.mapToDomain()
             setPrice(seats.caculateSeatPrice(LocalDateTime.of(date.date, time.time)))
         } else {
             setPrice(0)
@@ -144,16 +144,16 @@ class SeatSelectionActivity : AppCompatActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putSerializable(SEATS_POSITION, seats.mapToSeatsDto())
+        outState.putSerializable(SEATS_POSITION, seats.mapToUIModel())
         super.onSaveInstanceState(outState)
     }
 
     private fun moveActivity() {
-        val bookingMovie = BookingMovieDto(movie, date, time, ticketCount, seats.mapToSeatsDto())
+        val bookingMovie = BookingMovieUIModel(movie, date, time, ticketCount, seats.mapToUIModel())
         val intent = Intent(this, TicketActivity::class.java)
         intent.putExtra(BOOKING_MOVIE_KEY, bookingMovie)
         movieAlarmManager.putAlarm(bookingMovie)
-        BookingHistoryDto.add(bookingMovie)
+        BookingHistoryUIModel.add(bookingMovie)
         startActivity(intent)
         finish()
     }

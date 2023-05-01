@@ -2,13 +2,13 @@ package woowacourse.movie.mapper.seat
 
 import domain.Seat
 import domain.Seats
-import woowacourse.movie.dto.seat.SeatDto
-import woowacourse.movie.dto.seat.SeatsDto
+import woowacourse.movie.dto.seat.SeatUIModel
+import woowacourse.movie.dto.seat.SeatsUIModel
 
-fun SeatsDto.mapToSeats(): Seats {
+fun SeatsUIModel.mapToDomain(): Seats {
     return Seats(this.seats.map { Seat(it.row.mapToDomain(), it.col.mapToDomain()) })
 }
 
-fun Seats.mapToSeatsDto(): SeatsDto {
-    return SeatsDto(this.seats.map { SeatDto(it.row.mapToUIModel(), it.col.mapToUIModel()) })
+fun Seats.mapToUIModel(): SeatsUIModel {
+    return SeatsUIModel(this.seats.map { SeatUIModel(it.row.mapToUIModel(), it.col.mapToUIModel()) })
 }

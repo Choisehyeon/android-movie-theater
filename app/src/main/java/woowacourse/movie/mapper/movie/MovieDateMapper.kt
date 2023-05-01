@@ -1,12 +1,12 @@
 package woowacourse.movie.mapper.movie
 
 import domain.movieinfo.MovieDate
-import woowacourse.movie.dto.movie.MovieDateDto
+import woowacourse.movie.dto.movie.MovieDateUIModel
 
-fun MovieDateDto.mapToMovieDate(): MovieDate {
+fun MovieDateUIModel.mapToDomain(): MovieDate {
     return MovieDate(this.date)
 }
 
-fun MovieDate.mapToMovieDateDto(): MovieDateDto {
-    return MovieDateDto(this.date)
+fun MovieDate.mapToUIModel(): MovieDateUIModel {
+    return MovieDateUIModel(this.date)
 }

@@ -5,7 +5,7 @@ import woowacourse.movie.movielist.ViewType
 import java.io.Serializable
 import java.time.LocalDate
 
-data class MovieDto(
+data class MovieUIModel(
     val viewType: ViewType = ViewType.MOVIE_VIEW,
     val title: String,
     val startDate: LocalDate,
@@ -15,7 +15,7 @@ data class MovieDto(
     @DrawableRes val moviePoster: Int,
 ) : Serializable {
     companion object {
-        val movieData = MovieDto(
+        val movieData = MovieUIModel(
             viewType = ViewType.MOVIE_VIEW,
             title = "",
             startDate = LocalDate.now(),

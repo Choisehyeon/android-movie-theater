@@ -1,12 +1,12 @@
 package woowacourse.movie.mapper.movie
 
 import domain.movieinfo.MovieTime
-import woowacourse.movie.dto.movie.MovieTimeDto
+import woowacourse.movie.dto.movie.MovieTimeUIModel
 
-fun MovieTimeDto.mapToMovieTime(): MovieTime {
+fun MovieTimeUIModel.mapToDomain(): MovieTime {
     return MovieTime(this.time)
 }
 
-fun MovieTime.mapToMovieTimeDto(): MovieTimeDto {
-    return MovieTimeDto(this.time)
+fun MovieTime.mapToUIModel(): MovieTimeUIModel {
+    return MovieTimeUIModel(this.time)
 }

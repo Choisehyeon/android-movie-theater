@@ -3,8 +3,8 @@ package woowacourse.movie.dto.movie
 import java.io.Serializable
 import java.time.LocalTime
 
-data class MovieTimeDto(val time: LocalTime) : Serializable {
+data class MovieTimeUIModel(val time: LocalTime) : Serializable {
     companion object {
-        val movieTime = MovieTimeDto(LocalTime.now())
+        val movieTime = MovieTimeUIModel(LocalTime.now())
     }
 }

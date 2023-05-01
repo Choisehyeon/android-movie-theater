@@ -1,16 +1,16 @@
 package woowacourse.movie.mapper.movie
 
 import domain.BookingMovie
-import woowacourse.movie.dto.movie.BookingMovieDto
-import woowacourse.movie.mapper.seat.mapToSeats
-import woowacourse.movie.mapper.seat.mapToSeatsDto
-import woowacourse.movie.mapper.ticket.mapToTicketCount
-import woowacourse.movie.mapper.ticket.mapToTicketCountDto
+import woowacourse.movie.dto.movie.BookingMovieUIModel
+import woowacourse.movie.mapper.seat.mapToDomain
+import woowacourse.movie.mapper.seat.mapToUIModel
+import woowacourse.movie.mapper.ticket.mapToDomain
+import woowacourse.movie.mapper.ticket.mapToUIModel
 
-fun BookingMovieDto.mapToDomain(): BookingMovie {
-    return BookingMovie(this.movie.mapToMovie(), this.date.mapToMovieDate(), this.time.mapToMovieTime(), this.ticketCount.mapToTicketCount(), this.seats.mapToSeats())
+fun BookingMovieUIModel.mapToDomain(): BookingMovie {
+    return BookingMovie(this.movie.mapToDomain(), this.date.mapToDomain(), this.time.mapToDomain(), this.ticketCount.mapToDomain(), this.seats.mapToDomain())
 }
 
-fun BookingMovie.mapToUIModel(): BookingMovieDto {
-    return BookingMovieDto(this.movie.mapToMovieDto(), this.date.mapToMovieDateDto(), this.time.mapToMovieTimeDto(), this.ticketCount.mapToTicketCountDto(), this.seats.mapToSeatsDto())
+fun BookingMovie.mapToUIModel(): BookingMovieUIModel {
+    return BookingMovieUIModel(this.movie.mapToUIModel(), this.date.mapToUIModel(), this.time.mapToUIModel(), this.ticketCount.mapToUIModel(), this.seats.mapToUIModel())
 }

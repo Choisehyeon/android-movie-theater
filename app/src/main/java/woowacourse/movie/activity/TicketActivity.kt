@@ -7,11 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import woowacourse.movie.R
 import woowacourse.movie.activity.SeatSelectionActivity.Companion.BOOKING_MOVIE_KEY
-import woowacourse.movie.dto.movie.BookingMovieDto
-import woowacourse.movie.dto.movie.MovieDto
-import woowacourse.movie.dto.seat.SeatsDto
-import woowacourse.movie.dto.ticket.TicketCountDto
-import woowacourse.movie.mapper.seat.mapToSeats
+import woowacourse.movie.dto.movie.BookingMovieUIModel
+import woowacourse.movie.dto.movie.MovieUIModel
+import woowacourse.movie.dto.seat.SeatsUIModel
+import woowacourse.movie.dto.ticket.TicketCountUIModel
+import woowacourse.movie.mapper.seat.mapToDomain
 import woowacourse.movie.util.Extensions.intentSerializable
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -24,8 +24,8 @@ class TicketActivity : AppCompatActivity() {
         setContentView(R.layout.activity_ticket)
         setToolbar()
 
-        val bookingMovie = intent.intentSerializable(BOOKING_MOVIE_KEY, BookingMovieDto::class.java)
-            ?: BookingMovieDto.bookingMovie
+        val bookingMovie = intent.intentSerializable(BOOKING_MOVIE_KEY, BookingMovieUIModel::class.java)
+            ?: BookingMovieUIModel.bookingMovie
 
         showTicketInfo(
             bookingMovie.movie,
@@ -58,22 +58,22 @@ class TicketActivity : AppCompatActivity() {
         return formatDate.plus(" $formatTime")
     }
 
-    private fun showTicketInfo(movie: MovieDto, date: LocalDate, time: LocalTime) {
+    private fun showTicketInfo(movie: MovieUIModel, date: LocalDate, time: LocalTime) {
         val movieTitle = findViewById<TextView>(R.id.ticket_title)
         val movieDate = findViewById<TextView>(R.id.ticket_date)
         movieTitle.text = movie.title
         movieDate.text = formatMovieDateTime(date, time)
     }
 
-    private fun showTicketInfo(ticket: TicketCountDto, seats: SeatsDto) {
+    private fun showTicketInfo(ticket: TicketCountUIModel, seats: SeatsUIModel) {
         val numberOfPeople = findViewById<TextView>(R.id.number_of_people)
         numberOfPeople.text =
             getString(R.string.ticket_info, ticket.numberOfPeople, seats.getSeatsPositionToString())
     }
 
-    private fun showTicketPrice(seats: SeatsDto, date: LocalDate, time: LocalTime, count: Int) {
+    private fun showTicketPrice(seats: SeatsUIModel, date: LocalDate, time: LocalTime, count: Int) {
         val price = findViewById<TextView>(R.id.ticket_price)
-        val totalTicketPrice = seats.mapToSeats().caculateSeatPrice(LocalDateTime.of(date, time))
+        val totalTicketPrice = seats.mapToDomain().caculateSeatPrice(LocalDateTime.of(date, time))
 
         price.text = getString(R.string.ticket_price, totalTicketPrice)
     }

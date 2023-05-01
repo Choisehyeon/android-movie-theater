@@ -1,12 +1,12 @@
 package woowacourse.movie.mapper.ticket
 
 import domain.TicketCount
-import woowacourse.movie.dto.ticket.TicketCountDto
+import woowacourse.movie.dto.ticket.TicketCountUIModel
 
-fun TicketCountDto.mapToTicketCount(): TicketCount {
+fun TicketCountUIModel.mapToDomain(): TicketCount {
     return TicketCount(this.numberOfPeople)
 }
 
-fun TicketCount.mapToTicketCountDto(): TicketCountDto {
-    return TicketCountDto(this.numberOfPeople)
+fun TicketCount.mapToUIModel(): TicketCountUIModel {
+    return TicketCountUIModel(this.numberOfPeople)
 }

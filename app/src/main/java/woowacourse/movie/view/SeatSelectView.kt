@@ -12,10 +12,10 @@ import domain.SeatCol
 import domain.SeatRow
 import domain.Seats
 import woowacourse.movie.R
-import woowacourse.movie.dto.seat.SeatColDto
-import woowacourse.movie.dto.seat.SeatDto
-import woowacourse.movie.dto.seat.SeatRowDto
-import woowacourse.movie.mapper.seat.mapToSeat
+import woowacourse.movie.dto.seat.SeatColUIModel
+import woowacourse.movie.dto.seat.SeatUIModel
+import woowacourse.movie.dto.seat.SeatRowUIModel
+import woowacourse.movie.mapper.seat.mapToDomain
 
 class SeatSelectView(
     private val viewGroup: ViewGroup,
@@ -54,13 +54,13 @@ class SeatSelectView(
     }
 
     private fun getSeat(row: Int, col: Int): TextView {
-        val seat = SeatDto(SeatRowDto.of(row), SeatColDto(col))
+        val seat = SeatUIModel(SeatRowUIModel.of(row), SeatColUIModel(col))
         val textView = TextView(tableLayout.context)
         textView.text = seat.getString()
         textView.setTextColor(tableLayout.context.getColor(seat.row.getColor()))
         textView.gravity = Gravity.CENTER
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SEAT_TEXT_SIZE)
-        setSeatColor(seat.mapToSeat(), textView)
+        setSeatColor(seat.mapToDomain(), textView)
         textView.layoutParams =
             TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, SEAT_WEIGHT)
 

@@ -4,14 +4,14 @@ import androidx.annotation.DrawableRes
 import woowacourse.movie.R
 import woowacourse.movie.movielist.ViewType
 
-data class AdDto(
+data class AdUIModel(
     val viewType: ViewType = ViewType.AD_VIEW,
     @DrawableRes val adImage: Int,
     val url: String,
 ) {
     companion object {
-        fun getAdData(): AdDto {
-            return AdDto(
+        fun getAdData(): AdUIModel {
+            return AdUIModel(
                 adImage = R.drawable.ad,
                 url = "https://woowacourse.github.io/",
             )
