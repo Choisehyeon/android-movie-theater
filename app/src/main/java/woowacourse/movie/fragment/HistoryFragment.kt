@@ -16,19 +16,17 @@ import woowacourse.movie.movielist.OnClickListener
 
 class HistoryFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_history, container, false)
-        setUpHistoryDatas(view)
+        return inflater.inflate(R.layout.fragment_history, container, false)
+    }
 
-        return view
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setUpHistoryDatas(view)
     }
 
     private fun setUpHistoryDatas(view: View) {
