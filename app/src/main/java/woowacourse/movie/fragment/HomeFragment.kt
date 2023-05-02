@@ -11,12 +11,15 @@ import androidx.recyclerview.widget.RecyclerView
 import woowacourse.movie.R
 import woowacourse.movie.activity.MovieDetailActivity
 import woowacourse.movie.dto.AdUIModel
-import woowacourse.movie.dto.movie.MovieUIModel
 import woowacourse.movie.dto.movie.MovieDummy
+import woowacourse.movie.dto.movie.MovieUIModel
 import woowacourse.movie.movielist.MovieRecyclerViewAdapter
 import woowacourse.movie.movielist.OnClickListener
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), HomeFragmentContract.View {
+
+    override lateinit var presenter: HomeFragmentContract.Presenter
+    private val movieRecyclerView by lazy { requireActivity().findViewById<RecyclerView>(R.id.movie_rv) }
 
     private val movieItemClick = object : OnClickListener<MovieUIModel> {
         override fun onClick(item: MovieUIModel) {
@@ -38,23 +41,23 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
+        presenter = HomeFragmentPresenter(this)
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpMovieDatas(view)
+        presenter.loadDatas()
     }
 
-    private fun setUpMovieDatas(view: View) {
-        val movieRV = view.findViewById<RecyclerView>(R.id.movie_rv)
+    override fun setRecyclerView(movies: List<MovieUIModel>, ad: AdUIModel) {
         val movieRVAdapter = MovieRecyclerViewAdapter(
-            MovieDummy.movieDatas,
-            AdUIModel.getAdData(),
+            movies,
+            ad,
             movieItemClick,
             adItemClick,
         )
-        movieRV.adapter = movieRVAdapter
+        movieRecyclerView.adapter = movieRVAdapter
     }
 
     companion object {
