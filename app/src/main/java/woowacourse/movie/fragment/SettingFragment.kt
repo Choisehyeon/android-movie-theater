@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.Fragment
 import woowacourse.movie.R
-import woowacourse.movie.SettingPreference
 
-class SettingFragment : Fragment() {
+class SettingFragment : Fragment(), SettingFragmentContract.View {
+
+    override lateinit var presenter: SettingFragmentContract.Presenter
+    private lateinit var switch: SwitchCompat
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -17,21 +19,21 @@ class SettingFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
         val view = inflater.inflate(R.layout.fragment_setting, container, false)
+        switch = view.findViewById<SwitchCompat>(R.id.push_alarm_switch)
 
-        val switch = view.findViewById<SwitchCompat>(R.id.push_alarm_switch)
-        setSwitchState(switch)
-        onSwitchChangeListener(switch)
+        presenter = SettingFragmentPresenter(this)
+        presenter.setSettingState(this.requireContext())
+        onSwitchChangeListener()
         return view
     }
 
-    fun setSwitchState(switch: SwitchCompat) {
-        switch.isChecked = this.activity?.let { SettingPreference.getSetting(it) }
-            ?: throw IllegalArgumentException()
+    override fun setSwitchState(value: Boolean) {
+        switch.isChecked = value
     }
 
-    fun onSwitchChangeListener(switch: SwitchCompat) {
+    fun onSwitchChangeListener() {
         switch.setOnCheckedChangeListener { _, isChecked ->
-            SettingPreference.setSetting(this.requireActivity(), isChecked)
+            presenter.setSettingPreference(this.requireContext(), isChecked)
         }
     }
 }
