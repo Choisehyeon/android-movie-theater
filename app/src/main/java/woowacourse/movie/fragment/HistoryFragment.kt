@@ -2,9 +2,7 @@ package woowacourse.movie.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import woowacourse.movie.R
@@ -13,10 +11,14 @@ import woowacourse.movie.dto.movie.BookingMovieUIModel
 import woowacourse.movie.history.HistoryRecyclerViewAdapter
 import woowacourse.movie.movielist.OnClickListener
 
-class HistoryFragment : Fragment(), HistoryFragmentContract.View {
+class HistoryFragment : Fragment(R.layout.fragment_history), HistoryFragmentContract.View {
 
-    override lateinit var presenter: HistoryFragmentContract.Presenter
-    private lateinit var historyRecyclerView: RecyclerView
+    override val presenter: HistoryFragmentContract.Presenter by lazy {
+        HistoryFragmentPresenter(
+            this,
+        )
+    }
+    private val historyRecyclerView: RecyclerView by lazy { requireView().findViewById(R.id.history_rv)}
 
     private val onItemClick = object : OnClickListener<BookingMovieUIModel> {
         override fun onClick(item: BookingMovieUIModel) {
@@ -24,18 +26,7 @@ class HistoryFragment : Fragment(), HistoryFragmentContract.View {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        presenter = HistoryFragmentPresenter(this)
-        return inflater.inflate(R.layout.fragment_history, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        historyRecyclerView = view.findViewById(R.id.history_rv)
         presenter.loadDatas()
     }
 
