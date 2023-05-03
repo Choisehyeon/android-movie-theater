@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import woowacourse.movie.R
 import woowacourse.movie.activity.MovieDetailActivity
 import woowacourse.movie.dto.AdUIModel
-import woowacourse.movie.dto.movie.MovieDummy
 import woowacourse.movie.dto.movie.MovieUIModel
 import woowacourse.movie.movielist.MovieRecyclerViewAdapter
 import woowacourse.movie.movielist.OnClickListener
@@ -19,7 +18,8 @@ import woowacourse.movie.movielist.OnClickListener
 class HomeFragment : Fragment(), HomeFragmentContract.View {
 
     override lateinit var presenter: HomeFragmentContract.Presenter
-    private val movieRecyclerView by lazy { requireActivity().findViewById<RecyclerView>(R.id.movie_rv) }
+    private lateinit var movieRV: RecyclerView
+    private lateinit var movieRecyclerViewAdatper: MovieRecyclerViewAdapter
 
     private val movieItemClick = object : OnClickListener<MovieUIModel> {
         override fun onClick(item: MovieUIModel) {
@@ -41,23 +41,24 @@ class HomeFragment : Fragment(), HomeFragmentContract.View {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        presenter = HomeFragmentPresenter(this)
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        movieRV = view.findViewById<RecyclerView>(R.id.movie_rv)
+        presenter = HomeFragmentPresenter(this)
         presenter.loadDatas()
     }
 
     override fun setRecyclerView(movies: List<MovieUIModel>, ad: AdUIModel) {
-        val movieRVAdapter = MovieRecyclerViewAdapter(
+        movieRecyclerViewAdatper = MovieRecyclerViewAdapter(
             movies,
             ad,
             movieItemClick,
             adItemClick,
         )
-        movieRecyclerView.adapter = movieRVAdapter
+        movieRV.adapter = movieRecyclerViewAdatper
     }
 
     companion object {
