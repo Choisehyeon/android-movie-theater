@@ -1,12 +1,10 @@
 package woowacourse.movie.fragment
 
-import android.content.Context
-
 interface SettingFragmentContract {
     interface View {
-        var presenter: Presenter
+        val presenter: Presenter
         fun setSwitchState(value: Boolean)
-        fun getContext(): Context
+        fun onSwitchChangeListener()
     }
     interface Presenter {
         fun onSaveData(data: Boolean)
