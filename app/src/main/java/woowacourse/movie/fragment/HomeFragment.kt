@@ -23,16 +23,13 @@ class HomeFragment : Fragment(), HomeFragmentContract.View {
 
     private val movieItemClick = object : OnClickListener<MovieUIModel> {
         override fun onClick(item: MovieUIModel) {
-            val intent = Intent(context, MovieDetailActivity::class.java)
-            intent.putExtra(MOVIE_KEY, item)
-            startActivity(intent)
+            presenter.onMovieItemClick(item)
         }
     }
 
     private val adItemClick = object : OnClickListener<AdUIModel> {
         override fun onClick(item: AdUIModel) {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
-            startActivity(intent)
+            presenter.onAdItemClick(item)
         }
     }
 
@@ -59,6 +56,17 @@ class HomeFragment : Fragment(), HomeFragmentContract.View {
             adItemClick,
         )
         movieRV.adapter = movieRecyclerViewAdatper
+    }
+
+    override fun showMovieDetail(data: MovieUIModel) {
+        val intent = Intent(context, MovieDetailActivity::class.java)
+        intent.putExtra(MOVIE_KEY, data)
+        startActivity(intent)
+    }
+
+    override fun showAd(data: AdUIModel) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(data.url))
+        startActivity(intent)
     }
 
     companion object {
