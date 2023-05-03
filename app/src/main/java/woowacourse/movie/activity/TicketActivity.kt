@@ -6,8 +6,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import woowacourse.movie.R
-import woowacourse.movie.activity.SeatSelectionActivity.Companion.BOOKING_MOVIE_KEY
 import woowacourse.movie.dto.movie.BookingMovieUIModel
+import woowacourse.movie.dto.movie.MovieDateUIModel
+import woowacourse.movie.dto.movie.MovieTimeUIModel
 import woowacourse.movie.dto.movie.MovieUIModel
 import woowacourse.movie.dto.seat.SeatsUIModel
 import woowacourse.movie.dto.ticket.TicketCountUIModel
@@ -18,30 +19,22 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
-class TicketActivity : AppCompatActivity() {
+class TicketActivity : AppCompatActivity(), TicketActivityContract.View {
+
+    override lateinit var presenter: TicketActivityContract.Presenter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ticket)
         setToolbar()
-
-        val bookingMovie = intent.intentSerializable(BOOKING_MOVIE_KEY, BookingMovieUIModel::class.java)
-            ?: BookingMovieUIModel.bookingMovie
-
-        showTicketInfo(
-            bookingMovie.movie,
-            bookingMovie.date.date,
-            bookingMovie.time.time,
-        )
-        showTicketInfo(
-            bookingMovie.ticketCount,
-            bookingMovie.seats,
-        )
-        showTicketPrice(
-            bookingMovie.seats,
-            bookingMovie.date.date,
-            bookingMovie.time.time,
-            bookingMovie.ticketCount.numberOfPeople,
-        )
+        val bookingMovie =
+            intent.intentSerializable(
+                SeatSelectionActivity.BOOKING_MOVIE_KEY,
+                BookingMovieUIModel::class.java,
+            )
+                ?: BookingMovieUIModel.bookingMovie
+        presenter = TicketActivityPresenter(this)
+        presenter.loadData(bookingMovie)
     }
 
     private fun setToolbar() {
@@ -58,22 +51,31 @@ class TicketActivity : AppCompatActivity() {
         return formatDate.plus(" $formatTime")
     }
 
-    private fun showTicketInfo(movie: MovieUIModel, date: LocalDate, time: LocalTime) {
+    override fun showTicketInfo(
+        movie: MovieUIModel,
+        date: MovieDateUIModel,
+        time: MovieTimeUIModel,
+    ) {
         val movieTitle = findViewById<TextView>(R.id.ticket_title)
         val movieDate = findViewById<TextView>(R.id.ticket_date)
         movieTitle.text = movie.title
-        movieDate.text = formatMovieDateTime(date, time)
+        movieDate.text = formatMovieDateTime(date.date, time.time)
     }
 
-    private fun showTicketInfo(ticket: TicketCountUIModel, seats: SeatsUIModel) {
+    override fun showTicketInfo(ticket: TicketCountUIModel, seats: SeatsUIModel) {
         val numberOfPeople = findViewById<TextView>(R.id.number_of_people)
         numberOfPeople.text =
             getString(R.string.ticket_info, ticket.numberOfPeople, seats.getSeatsPositionToString())
     }
 
-    private fun showTicketPrice(seats: SeatsUIModel, date: LocalDate, time: LocalTime, count: Int) {
+    override fun showTicketPrice(
+        seats: SeatsUIModel,
+        date: MovieDateUIModel,
+        time: MovieTimeUIModel,
+    ) {
         val price = findViewById<TextView>(R.id.ticket_price)
-        val totalTicketPrice = seats.mapToDomain().caculateSeatPrice(LocalDateTime.of(date, time))
+        val totalTicketPrice =
+            seats.mapToDomain().caculateSeatPrice(LocalDateTime.of(date.date, time.time))
 
         price.text = getString(R.string.ticket_price, totalTicketPrice)
     }

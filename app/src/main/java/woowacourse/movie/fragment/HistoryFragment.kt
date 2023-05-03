@@ -9,12 +9,14 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import woowacourse.movie.R
 import woowacourse.movie.activity.TicketActivity
-import woowacourse.movie.dto.BookingHistoryUIModel
 import woowacourse.movie.dto.movie.BookingMovieUIModel
 import woowacourse.movie.history.HistoryRecyclerViewAdapter
 import woowacourse.movie.movielist.OnClickListener
 
-class HistoryFragment : Fragment() {
+class HistoryFragment : Fragment(), HistoryFragmentContract.View {
+
+    override lateinit var presenter: HistoryFragmentContract.Presenter
+    private lateinit var historyRecyclerView: RecyclerView
 
     private val onItemClick = object : OnClickListener<BookingMovieUIModel> {
         override fun onClick(item: BookingMovieUIModel) {
@@ -29,21 +31,21 @@ class HistoryFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
+        presenter = HistoryFragmentPresenter(this)
         return inflater.inflate(R.layout.fragment_history, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpHistoryDatas(view)
+        historyRecyclerView = view.findViewById(R.id.history_rv)
+        presenter.loadDatas()
     }
 
-    private fun setUpHistoryDatas(view: View) {
-        val historyRecyclerView = view.findViewById<RecyclerView>(R.id.history_rv)
+    override fun setRecyclerView(histories: List<BookingMovieUIModel>) {
         val historyRVAdapter = HistoryRecyclerViewAdapter(
-            BookingHistoryUIModel.getHistory(),
+            histories,
             onItemClick,
         )
-
         historyRecyclerView.adapter = historyRVAdapter
     }
 
