@@ -21,8 +21,7 @@ import java.time.format.DateTimeFormatter
 
 class TicketActivity : AppCompatActivity(), TicketActivityContract.View {
 
-    override lateinit var presenter: TicketActivityContract.Presenter
-
+    override val presenter: TicketActivityContract.Presenter by lazy { TicketActivityPresenter(this)}
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ticket)
@@ -33,24 +32,21 @@ class TicketActivity : AppCompatActivity(), TicketActivityContract.View {
                 BookingMovieUIModel::class.java,
             )
                 ?: BookingMovieUIModel.bookingMovie
-        presenter = TicketActivityPresenter(this)
         presenter.loadData(bookingMovie)
     }
-
-    private fun setToolbar() {
+    override fun setToolbar() {
         val toolbar = findViewById<Toolbar>(R.id.ticket_toolbar)
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    private fun formatMovieDateTime(date: LocalDate, time: LocalTime): String {
+    override fun formatMovieDateTime(date: LocalDate, time: LocalTime): String {
         val formatDate = date.format(DateTimeFormatter.ofPattern(getString(R.string.date_format)))
         val formatTime = time.format(DateTimeFormatter.ofPattern(getString(R.string.time_format)))
 
         return formatDate.plus(" $formatTime")
     }
-
     override fun showTicketInfo(
         movie: MovieUIModel,
         date: MovieDateUIModel,
