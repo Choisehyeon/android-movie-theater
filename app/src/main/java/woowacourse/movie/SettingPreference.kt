@@ -3,7 +3,7 @@ package woowacourse.movie
 import android.content.Context
 import android.content.SharedPreferences
 
-class SettingPreference(context: Context) {
+class SettingPreference(context: Context) : DataPreference {
 
     private val sharedPreferences: SharedPreferences =
         context.applicationContext.getSharedPreferences(
@@ -11,11 +11,11 @@ class SettingPreference(context: Context) {
             Context.MODE_PRIVATE,
         )
 
-    fun loadData(): Boolean {
+    override fun loadData(): Boolean {
         return sharedPreferences.getBoolean(setting_value_key, false)
     }
 
-    fun saveData(value: Boolean) {
+    override fun saveData(value: Boolean) {
         sharedPreferences.edit().putBoolean(setting_value_key, value).apply()
     }
 
