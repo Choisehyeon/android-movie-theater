@@ -4,12 +4,12 @@ import android.content.Context
 import woowacourse.movie.SettingPreference
 
 class SettingFragmentPresenter(val view: SettingFragmentContract.View) : SettingFragmentContract.Presenter {
-
-    override fun setSettingPreference(context: Context, value: Boolean) {
-        SettingPreference.setSetting(context, value)
+    private val settingPreference = SettingPreference(view.getContext())
+    override fun onSaveData(data: Boolean) {
+        settingPreference.saveData(data)
     }
 
-    override fun setSettingState(context: Context) {
-        view.setSwitchState(SettingPreference.getSetting(context))
+    override fun onLoadData() {
+        view.setSwitchState(settingPreference.loadData())
     }
 }
