@@ -6,9 +6,10 @@ interface SettingFragmentContract {
     interface View {
         var presenter: Presenter
         fun setSwitchState(value: Boolean)
+        fun getContext(): Context
     }
     interface Presenter {
-        fun setSettingPreference(context: Context, value: Boolean)
-        fun setSettingState(context: Context)
+        fun onSaveData(data: Boolean)
+        fun onLoadData()
     }
 }

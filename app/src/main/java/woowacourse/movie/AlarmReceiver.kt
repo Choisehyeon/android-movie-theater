@@ -11,7 +11,8 @@ import woowacourse.movie.dto.movie.BookingMovieUIModel
 class AlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action == ALARM_CODE && SettingPreference.getSetting(context)) {
+        val sharedPreference = SettingPreference(context)
+        if (intent.action == ALARM_CODE && sharedPreference.loadData()) {
             NotificationManager.createNotificationChannel(context)
 
             val bookingMovie = intent.getSerializableExtra(BOOKING_MOVIE_KEY) as BookingMovieUIModel

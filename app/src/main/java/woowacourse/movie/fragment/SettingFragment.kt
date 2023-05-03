@@ -1,5 +1,6 @@
 package woowacourse.movie.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +23,7 @@ class SettingFragment : Fragment(), SettingFragmentContract.View {
         switch = view.findViewById<SwitchCompat>(R.id.push_alarm_switch)
 
         presenter = SettingFragmentPresenter(this)
-        presenter.setSettingState(this.requireContext())
+        presenter.onLoadData()
         onSwitchChangeListener()
         return view
     }
@@ -31,9 +32,13 @@ class SettingFragment : Fragment(), SettingFragmentContract.View {
         switch.isChecked = value
     }
 
+    override fun getContext(): Context {
+        return activity?.applicationContext ?: throw IllegalArgumentException()
+    }
+
     fun onSwitchChangeListener() {
         switch.setOnCheckedChangeListener { _, isChecked ->
-            presenter.setSettingPreference(this.requireContext(), isChecked)
+            presenter.onSaveData(isChecked)
         }
     }
 }
