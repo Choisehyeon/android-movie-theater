@@ -20,9 +20,7 @@ class HistoryFragment : Fragment(), HistoryFragmentContract.View {
 
     private val onItemClick = object : OnClickListener<BookingMovieUIModel> {
         override fun onClick(item: BookingMovieUIModel) {
-            val intent = Intent(context, TicketActivity::class.java)
-            intent.putExtra(BOOKING_MOVIE_KEY, item)
-            startActivity(intent)
+            presenter.onHistoryClick(item)
         }
     }
 
@@ -47,6 +45,12 @@ class HistoryFragment : Fragment(), HistoryFragmentContract.View {
             onItemClick,
         )
         historyRecyclerView.adapter = historyRVAdapter
+    }
+
+    override fun showMovieTicket(data: BookingMovieUIModel) {
+        val intent = Intent(context, TicketActivity::class.java)
+        intent.putExtra(BOOKING_MOVIE_KEY, data)
+        startActivity(intent)
     }
 
     companion object {
