@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),
-    ) { isGranted: Boolean -> SettingPreference.setSetting(this, isGranted) }
+    ) { isGranted: Boolean -> SettingPreference(this).saveData(isGranted) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
