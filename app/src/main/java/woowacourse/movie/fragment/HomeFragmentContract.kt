@@ -5,7 +5,7 @@ import woowacourse.movie.dto.movie.MovieUIModel
 
 interface HomeFragmentContract {
     interface View {
-        var presenter: Presenter
+        val presenter: Presenter
         fun setRecyclerView(movies: List<MovieUIModel>, ad: AdUIModel)
         fun showMovieDetail(data: MovieUIModel)
         fun showAd(data: AdUIModel)
