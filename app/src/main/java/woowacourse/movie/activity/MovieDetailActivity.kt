@@ -12,24 +12,25 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import domain.DayOfWeek
 import domain.movieinfo.MovieDate
-import domain.movieinfo.MovieTime
-import domain.screeningschedule.ReservationDate
-import domain.screeningschedule.ReservationTime
 import woowacourse.movie.R
 import woowacourse.movie.dto.movie.MovieDateUIModel
+import woowacourse.movie.dto.movie.MovieTimeUIModel
 import woowacourse.movie.dto.movie.MovieUIModel
 import woowacourse.movie.dto.ticket.TicketCountUIModel
 import woowacourse.movie.mapper.movie.mapToUIModel
-import woowacourse.movie.mapper.ticket.mapToDomain
 import woowacourse.movie.mapper.ticket.mapToUIModel
 import woowacourse.movie.util.Extensions.intentSerializable
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class MovieDetailActivity : AppCompatActivity() {
-    private var movieTikcet = TicketCountUIModel()
+class MovieDetailActivity : AppCompatActivity(), MovieDetailActivityContract.View {
+
+    override val presenter: MovieDetailActivityContract.Presenter by lazy {
+        MovieDetailActivityPresenter(
+            this,
+        )
+    }
     private var dateSpinnerPosition = 0
     private var timeSpinnerPosition = 0
 
@@ -43,29 +44,31 @@ class MovieDetailActivity : AppCompatActivity() {
         setToolBar()
         setUpState(savedInstanceState)
 
-        val movie = intent.intentSerializable(MOVIE_KEY, MovieUIModel::class.java) ?: MovieUIModel.movieData
+        val movie =
+            intent.intentSerializable(MOVIE_KEY, MovieUIModel::class.java) ?: MovieUIModel.movieData
 
-        setDateSpinner(movie.startDate, movie.endDate)
-        setUpMovieData(movie)
-        setNumberOfPeople()
+        selectDateSpinner(movie.startDate, movie.endDate)
+        presenter.loadMovieData(movie)
+        onClickDecreaseBtnListener()
+        onClickIncreaseBtnListener()
         onClickBookBtnListener(movie)
     }
 
-    private fun setUpState(savedInstanceState: Bundle?) {
+    override fun setUpState(savedInstanceState: Bundle?) {
         if (savedInstanceState != null) {
             dateSpinnerPosition = savedInstanceState.getInt(DATE_SPINNER_POSITION)
             timeSpinnerPosition = savedInstanceState.getInt(TIME_SPINNER_POSITION)
         }
     }
 
-    private fun setToolBar() {
+    override fun setToolBar() {
         val toolbar = findViewById<Toolbar>(R.id.movie_detail_toolbar)
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    private fun setUpMovieData(movie: MovieUIModel) {
+    override fun setMovieData(movie: MovieUIModel) {
         val moviePoster = findViewById<ImageView>(R.id.movie_poster)
         val movieTitle = findViewById<TextView>(R.id.movie_title)
         val movieDate = findViewById<TextView>(R.id.movie_date)
@@ -81,7 +84,15 @@ class MovieDetailActivity : AppCompatActivity() {
         description.text = movie.description
     }
 
-    private fun formatMovieRunningDate(item: MovieUIModel): String {
+    override fun setDateSpinnerPosition(dateSpinnerPosition: Int) {
+        selectDateSpinner.setSelection(dateSpinnerPosition)
+    }
+
+    override fun setTimeSpinnerPosition(timeSpinnerPosition: Int) {
+        selectTimeSpinner.setSelection(timeSpinnerPosition)
+    }
+
+    override fun formatMovieRunningDate(item: MovieUIModel): String {
         val startDate =
             item.startDate.format(DateTimeFormatter.ofPattern(getString(R.string.date_format)))
         val endDate =
@@ -89,45 +100,73 @@ class MovieDetailActivity : AppCompatActivity() {
         return getString(R.string.movie_running_date).format(startDate, endDate)
     }
 
-    private fun setNumberOfPeople() {
+    override fun setBookerNumber(number: TicketCountUIModel) {
         val booker = findViewById<TextView>(R.id.booker_num)
-        booker.text = movieTikcet.numberOfPeople.toString()
-        onClickDecreaseBtnListener(booker)
-        onClickIncreaseBtnListener(booker)
+        booker.text = number.numberOfPeople.toString()
     }
 
-    private fun onClickDecreaseBtnListener(booker: TextView) {
+    override fun showSeatSelectPage(
+        data: MovieUIModel,
+        count: TicketCountUIModel,
+        date: MovieDateUIModel,
+        time: MovieTimeUIModel,
+    ) {
+        val intent = Intent(this, SeatSelectionActivity::class.java)
+        intent.putExtra(TICKET_KEY, count)
+        intent.putExtra(MOVIE_KEY, data)
+        intent.putExtra(DATE_KEY, date)
+        intent.putExtra(TIME_KEY, time)
+        startActivity(intent)
+        finish()
+    }
+
+    override fun setDateSpinnerData(data: List<String>) {
+        val dateAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            data,
+        )
+        dateAdapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item)
+
+        selectDateSpinner.adapter = dateAdapter
+    }
+
+    override fun setTimeSpinnerData(data: List<String>) {
+        val timeAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            data,
+        )
+
+        timeAdapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item)
+        selectTimeSpinner.adapter = timeAdapter
+    }
+
+    private fun onClickDecreaseBtnListener() {
         val minusBtn = findViewById<Button>(R.id.minus_button)
 
         minusBtn.setOnClickListener {
-            val ticketDecrease = movieTikcet.mapToDomain().decrease()
-            movieTikcet = ticketDecrease.mapToUIModel()
-            booker.text = movieTikcet.numberOfPeople.toString()
+            presenter.decreaseNum()
         }
     }
 
-    private fun onClickIncreaseBtnListener(booker: TextView) {
+    private fun onClickIncreaseBtnListener() {
         val plusBtn = findViewById<Button>(R.id.plus_button)
 
         plusBtn.setOnClickListener {
-            val ticketIncrease = movieTikcet.mapToDomain().increase()
-            movieTikcet = ticketIncrease.mapToUIModel()
-            booker.text = movieTikcet.numberOfPeople.toString()
+            presenter.increaseNum()
         }
     }
 
     private fun onClickBookBtnListener(movie: MovieUIModel) {
         val bookBtn = findViewById<Button>(R.id.book_button)
+
         bookBtn.setOnClickListener {
-            val selectedDate = MovieDate.of(selectDateSpinner.selectedItem.toString())
-            val selectedTime = MovieTime.of(selectTimeSpinner.selectedItem.toString())
-            val intent = Intent(this, SeatSelectionActivity::class.java)
-            intent.putExtra(TICKET_KEY, movieTikcet)
-            intent.putExtra(MOVIE_KEY, movie)
-            intent.putExtra(DATE_KEY, selectedDate.mapToUIModel())
-            intent.putExtra(TIME_KEY, selectedTime.mapToUIModel())
-            startActivity(intent)
-            finish()
+            presenter.onBookBtnClick(
+                movie,
+                selectDateSpinner.selectedItem.toString(),
+                selectTimeSpinner.selectedItem.toString(),
+            )
         }
     }
 
@@ -141,10 +180,9 @@ class MovieDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun setDateSpinner(startDate: LocalDate, endDate: LocalDate) {
-        selectDateSpinner.adapter = getDateSpinnerAdapter(startDate, endDate)
-        selectDateSpinner.setSelection(dateSpinnerPosition)
-
+    private fun selectDateSpinner(startDate: LocalDate, endDate: LocalDate) {
+        presenter.loadDateSpinnerData(startDate, endDate)
+        presenter.loadDateSpinnerPosition(dateSpinnerPosition)
         selectDateSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -152,20 +190,19 @@ class MovieDetailActivity : AppCompatActivity() {
                 position: Int,
                 id: Long,
             ) {
-                setTimeSpinner(
+                selectTimeSpinner(
                     MovieDate.of(selectDateSpinner.getItemAtPosition(position) as String)
                         .mapToUIModel(),
                 )
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
 
-    private fun setTimeSpinner(selectedDay: MovieDateUIModel) {
-        selectTimeSpinner.adapter = getTimeSpinnerAdapter(selectedDay)
-        selectTimeSpinner.setSelection(timeSpinnerPosition)
+    private fun selectTimeSpinner(selectedDay: MovieDateUIModel) {
+        presenter.loadTimeSpinnerData(selectedDay)
+        presenter.loadTimeSpinnerPosition(timeSpinnerPosition)
 
         selectTimeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -177,35 +214,8 @@ class MovieDetailActivity : AppCompatActivity() {
                 timeSpinnerPosition = position
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-    }
-
-    private fun getDateSpinnerAdapter(
-        startDate: LocalDate,
-        endDate: LocalDate,
-    ): ArrayAdapter<String> {
-        val dateAdapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_item,
-            ReservationDate(startDate, endDate).getIntervalDays(),
-        )
-        dateAdapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item)
-
-        return dateAdapter
-    }
-
-    private fun getTimeSpinnerAdapter(selectedDay: MovieDateUIModel): ArrayAdapter<String> {
-        val timeAdapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_item,
-            ReservationTime(DayOfWeek.checkDayOfWeek(selectedDay.date)).getIntervalTimes(),
-        )
-
-        timeAdapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item)
-
-        return timeAdapter
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
