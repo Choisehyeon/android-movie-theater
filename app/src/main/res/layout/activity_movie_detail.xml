@@ -145,7 +145,7 @@
             app:layout_constraintEnd_toStartOf="@id/plus_button"
             app:layout_constraintStart_toEndOf="@id/minus_button"
             app:layout_constraintTop_toBottomOf="@id/select_date"
-            tools:text="1" />
+            android:text="@string/booker_people" />
 
         <Button
             android:id="@+id/plus_button"
