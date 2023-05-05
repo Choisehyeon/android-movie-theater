@@ -16,10 +16,11 @@ import woowacourse.movie.dto.seat.SeatColUIModel
 import woowacourse.movie.dto.seat.SeatUIModel
 import woowacourse.movie.dto.seat.SeatRowUIModel
 import woowacourse.movie.mapper.seat.mapToDomain
+import woowacourse.movie.mapper.seat.mapToUIModel
 
 class SeatSelectView(
     private val viewGroup: ViewGroup,
-    val onSeatClick: (Seat, TextView) -> Unit,
+    val onSeatClick: (SeatUIModel, Int, Int) -> Unit,
     private val seats: Seats,
 ) {
 
@@ -83,7 +84,7 @@ class SeatSelectView(
                         SeatRow(rowIndex + 1),
                         SeatCol(colIndex + 1),
                     )
-                    onSeatClick(seat, textView)
+                    onSeatClick(seat.mapToUIModel(), rowIndex, colIndex)
                 }
             }
         }
