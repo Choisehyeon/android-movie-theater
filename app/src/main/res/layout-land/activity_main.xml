@@ -14,10 +14,19 @@
         app:title="Movie"
         app:titleTextColor="@color/white" />
 
-    <ListView
-        android:id="@+id/movie_listView"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="56dp" />
+        android:layout_marginTop="56dp"
+        android:layout_marginBottom="57dp"
+        tools:layout="@layout/fragment_history" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/navigation_bar"
+        android:layout_width="match_parent"
+        android:layout_height="57dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/navi_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
