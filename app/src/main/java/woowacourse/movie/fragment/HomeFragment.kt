@@ -3,7 +3,9 @@ package woowacourse.movie.fragment
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import woowacourse.movie.R
@@ -13,7 +15,7 @@ import woowacourse.movie.dto.movie.MovieUIModel
 import woowacourse.movie.movielist.MovieRecyclerViewAdapter
 import woowacourse.movie.movielist.OnClickListener
 
-class HomeFragment : Fragment(R.layout.fragment_home), HomeFragmentContract.View {
+class HomeFragment : Fragment(), HomeFragmentContract.View {
 
     override val presenter: HomeFragmentContract.Presenter by lazy { HomeFragmentPresenter(this) }
     private val movieRV: RecyclerView by lazy { requireView().findViewById(R.id.movie_rv) }
@@ -29,6 +31,14 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeFragmentContract.View
         override fun onClick(item: AdUIModel) {
             presenter.onAdItemClick(item)
         }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
+        return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,5 +68,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeFragmentContract.View
 
     companion object {
         private const val MOVIE_KEY = "movie"
+        const val TAG = "home_fragment"
     }
 }
