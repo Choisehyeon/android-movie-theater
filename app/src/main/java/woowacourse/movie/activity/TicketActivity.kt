@@ -9,7 +9,6 @@ import woowacourse.movie.R
 import woowacourse.movie.dto.movie.BookingMovieUIModel
 import woowacourse.movie.dto.movie.MovieDateUIModel
 import woowacourse.movie.dto.movie.MovieTimeUIModel
-import woowacourse.movie.dto.movie.MovieUIModel
 import woowacourse.movie.dto.seat.SeatsUIModel
 import woowacourse.movie.dto.ticket.TicketCountUIModel
 import woowacourse.movie.mapper.seat.mapToDomain
@@ -21,7 +20,7 @@ import java.time.format.DateTimeFormatter
 
 class TicketActivity : AppCompatActivity(), TicketActivityContract.View {
 
-    override val presenter: TicketActivityContract.Presenter by lazy { TicketActivityPresenter(this)}
+    override val presenter: TicketActivityContract.Presenter by lazy { TicketActivityPresenter(this) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ticket)
@@ -34,6 +33,7 @@ class TicketActivity : AppCompatActivity(), TicketActivityContract.View {
                 ?: BookingMovieUIModel.bookingMovie
         presenter.loadData(bookingMovie)
     }
+
     override fun setToolbar() {
         val toolbar = findViewById<Toolbar>(R.id.ticket_toolbar)
 
@@ -47,14 +47,15 @@ class TicketActivity : AppCompatActivity(), TicketActivityContract.View {
 
         return formatDate.plus(" $formatTime")
     }
+
     override fun showTicketInfo(
-        movie: MovieUIModel,
+        title: String,
         date: MovieDateUIModel,
         time: MovieTimeUIModel,
     ) {
         val movieTitle = findViewById<TextView>(R.id.ticket_title)
         val movieDate = findViewById<TextView>(R.id.ticket_date)
-        movieTitle.text = movie.title
+        movieTitle.text = title
         movieDate.text = formatMovieDateTime(date.date, time.time)
     }
 
