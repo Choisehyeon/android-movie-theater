@@ -1,12 +1,19 @@
 package woowacourse.movie.fragment
 
-import woowacourse.movie.dto.BookingHistoryUIModel
+import woowacourse.movie.database.ReservationRepository
 import woowacourse.movie.dto.movie.BookingMovieUIModel
 
-class HistoryFragmentPresenter(val view: HistoryFragmentContract.View) :
+class HistoryFragmentPresenter(
+    val view: HistoryFragmentContract.View,
+    private val repository: ReservationRepository,
+) :
     HistoryFragmentContract.Presenter {
+    override fun init() {
+        view.setRecyclerView()
+    }
+
     override fun loadDatas() {
-        view.setRecyclerView(BookingHistoryUIModel.getHistory())
+        view.updateRecyclerView(repository.getAll())
     }
 
     override fun onHistoryClick(item: BookingMovieUIModel) {
