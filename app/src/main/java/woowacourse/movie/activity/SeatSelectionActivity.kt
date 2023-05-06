@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import woowacourse.movie.AlarmReceiver
 import woowacourse.movie.MovieAlarmManager
 import woowacourse.movie.R
+import woowacourse.movie.database.ReservationDatabase
+import woowacourse.movie.database.ReservationRepository
 import woowacourse.movie.dto.movie.BookingMovieUIModel
 import woowacourse.movie.dto.movie.MovieDateUIModel
 import woowacourse.movie.dto.movie.MovieTimeUIModel
@@ -30,6 +32,7 @@ class SeatSelectionActivity : AppCompatActivity(), SeatSelectionActivityContract
             date,
             time,
             movie,
+            ReservationRepository(ReservationDatabase.getDatabase(this)),
         )
     }
     private val date by lazy {

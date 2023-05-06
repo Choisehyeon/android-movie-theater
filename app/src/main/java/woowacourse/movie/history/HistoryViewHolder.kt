@@ -26,7 +26,7 @@ class HistoryViewHolder(
 
     fun bind(item: BookingMovieUIModel) {
         reservationTime.text = formatMovieDateTime(item.date, item.time)
-        reservationMovie.text = item.movie.title
+        reservationMovie.text = item.movieTitle
     }
 
     private fun formatMovieDateTime(date: MovieDateUIModel, time: MovieTimeUIModel): String {
