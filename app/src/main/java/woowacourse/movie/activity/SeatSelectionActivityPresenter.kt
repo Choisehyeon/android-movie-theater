@@ -4,7 +4,7 @@ import domain.Seat
 import domain.Seats
 import woowacourse.movie.R
 import woowacourse.movie.activity.SeatSelectionActivity.Companion.SEATS_POSITION
-import woowacourse.movie.dto.BookingHistoryUIModel
+import woowacourse.movie.database.ReservationRepository
 import woowacourse.movie.dto.movie.BookingMovieUIModel
 import woowacourse.movie.dto.movie.MovieDateUIModel
 import woowacourse.movie.dto.movie.MovieTimeUIModel
@@ -22,6 +22,7 @@ class SeatSelectionActivityPresenter(
     val date: MovieDateUIModel,
     val time: MovieTimeUIModel,
     val movie: MovieUIModel,
+    private val repository: ReservationRepository,
 ) : SeatSelectionActivityContract.Presenter {
     private var seats = Seats()
 
@@ -88,8 +89,8 @@ class SeatSelectionActivityPresenter(
     }
 
     override fun startTicketActivity() {
-        val bookingMovie = BookingMovieUIModel(movie, date, time, count, seats.mapToUIModel())
-        BookingHistoryUIModel.add(bookingMovie)
+        val bookingMovie = BookingMovieUIModel(movie.title, date, time, count, seats.mapToUIModel())
+        repository.insertReservation(bookingMovie)
         view.moveTicketActivity(bookingMovie)
     }
 

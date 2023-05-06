@@ -1,5 +1,6 @@
 package woowacourse.movie.history
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,7 +9,7 @@ import woowacourse.movie.dto.movie.BookingMovieUIModel
 import woowacourse.movie.movielist.OnClickListener
 
 class HistoryRecyclerViewAdapter(
-    private val histories: List<BookingMovieUIModel>,
+    private var histories: List<BookingMovieUIModel>,
     private val onItemClickListener: OnClickListener<BookingMovieUIModel>,
 ) :
     RecyclerView.Adapter<HistoryViewHolder>() {
@@ -32,5 +33,11 @@ class HistoryRecyclerViewAdapter(
 
     override fun getItemCount(): Int {
         return histories.size
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateDatas(histories: List<BookingMovieUIModel>) {
+        this.histories = histories
+        notifyDataSetChanged()
     }
 }
