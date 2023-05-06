@@ -20,7 +20,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
             NotificationManager.createNotificationBuilder(
                 context,
-                bookingMovie.movie.title,
+                bookingMovie.movieTitle,
                 createIntent(context, bookingMovie),
             )
         }
