@@ -7,6 +7,7 @@ import java.time.LocalDate
 
 data class MovieUIModel(
     val viewType: ViewType = ViewType.MOVIE_VIEW,
+    val id: Int,
     val title: String,
     val startDate: LocalDate,
     val endDate: LocalDate,
@@ -17,6 +18,7 @@ data class MovieUIModel(
     companion object {
         val movieData = MovieUIModel(
             viewType = ViewType.MOVIE_VIEW,
+            id = 0,
             title = "",
             startDate = LocalDate.now(),
             endDate = LocalDate.now(),
