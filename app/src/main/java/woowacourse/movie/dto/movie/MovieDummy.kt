@@ -6,6 +6,7 @@ import java.time.LocalDate
 object MovieDummy {
     val movieDatas = List(1000) {
         MovieUIModel(
+            id = it,
             title = "해리포터 $it",
             startDate = LocalDate.of(2023, 4, 29),
             endDate = LocalDate.of(2024, 4, 1),

@@ -5,6 +5,7 @@ import woowacourse.movie.dto.movie.MovieUIModel
 
 fun MovieUIModel.mapToDomain(): Movie {
     return Movie(
+        id = this.id,
         title = this.title,
         startDate = this.startDate,
         endDate = this.endDate,
@@ -16,6 +17,7 @@ fun MovieUIModel.mapToDomain(): Movie {
 
 fun Movie.mapToUIModel(): MovieUIModel {
     return MovieUIModel(
+        id = this.id,
         title = this.title,
         startDate = this.startDate,
         endDate = this.endDate,
