@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
@@ -14,6 +15,7 @@ import woowacourse.movie.R
 import woowacourse.movie.util.preference.SettingPreference
 import woowacourse.movie.activity.main.contract.MainActivityContract
 import woowacourse.movie.activity.main.contract.presenter.MainActivityPresenter
+import woowacourse.movie.databinding.ActivityMainBinding
 import woowacourse.movie.fragment.history.HistoryFragment
 import woowacourse.movie.fragment.home.HomeFragment
 import woowacourse.movie.fragment.setting.SettingFragment
@@ -26,6 +28,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
             SettingPreference(this),
         )
     }
+    private lateinit var binding: ActivityMainBinding
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),
@@ -33,7 +36,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         checkPermisson()
         showHomeFragment()
@@ -41,9 +44,8 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     }
 
     private fun onClickBottomNavItem() {
-        val bottomNav = findViewById<BottomNavigationView>(R.id.navigation_bar)
-        bottomNav.selectedItemId = R.id.home
-        bottomNav.setOnItemSelectedListener { item ->
+        binding.navigationBar.selectedItemId = R.id.home
+        binding.navigationBar.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.history -> showHistoryFragment()
                 R.id.home -> showHomeFragment()

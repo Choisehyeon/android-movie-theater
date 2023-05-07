@@ -12,6 +12,7 @@ import domain.SeatCol
 import domain.SeatRow
 import domain.Seats
 import woowacourse.movie.R
+import woowacourse.movie.databinding.ActivitySeatSelectionBinding
 import woowacourse.movie.dto.seat.SeatColUIModel
 import woowacourse.movie.dto.seat.SeatUIModel
 import woowacourse.movie.dto.seat.SeatRowUIModel
@@ -19,13 +20,10 @@ import woowacourse.movie.mapper.seat.mapToDomain
 import woowacourse.movie.mapper.seat.mapToUIModel
 
 class SeatSelectView(
-    private val viewGroup: ViewGroup,
+    private val binding: ActivitySeatSelectionBinding,
     val onSeatClick: (SeatUIModel, Int, Int) -> Unit,
     private val seats: Seats,
 ) {
-
-    private val tableLayout = viewGroup.findViewById<TableLayout>(R.id.seat)
-
     var seatsView: List<List<TextView>> = mutableListOf()
 
     init {
@@ -35,19 +33,19 @@ class SeatSelectView(
 
     private fun setSeatsView() {
         repeat(TABLE_ROW) { row ->
-            val tableRow = TableRow(tableLayout.context)
+            val tableRow = TableRow(binding.seat.context)
             tableRow.layoutParams = TableLayout.LayoutParams(0, 0, SEAT_WEIGHT)
 
             repeat(TABLE_COL) { col ->
                 tableRow.addView(getSeat(row + 1, col + 1))
             }
-            tableLayout.addView(tableRow)
+            binding.seat.addView(tableRow)
         }
         bindSeatsView()
     }
 
     private fun bindSeatsView() {
-        seatsView = tableLayout
+        seatsView = binding.seat
             .children
             .filterIsInstance<TableRow>()
             .map { it.children.filterIsInstance<TextView>().toList() }
@@ -56,9 +54,9 @@ class SeatSelectView(
 
     private fun getSeat(row: Int, col: Int): TextView {
         val seat = SeatUIModel(SeatRowUIModel.of(row), SeatColUIModel(col))
-        val textView = TextView(tableLayout.context)
+        val textView = TextView(binding.root.context)
         textView.text = seat.getString()
-        textView.setTextColor(tableLayout.context.getColor(seat.row.getColor()))
+        textView.setTextColor(binding.root.context.getColor(seat.row.getColor()))
         textView.gravity = Gravity.CENTER
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SEAT_TEXT_SIZE)
         setSeatColor(seat.mapToDomain(), textView)
@@ -70,9 +68,9 @@ class SeatSelectView(
 
     private fun setSeatColor(seat: Seat, textView: TextView) {
         if (seats.containsSeat(seat)) {
-            textView.setBackgroundColor(viewGroup.context.getColor(R.color.select_seat))
+            textView.setBackgroundColor(binding.root.context.getColor(R.color.select_seat))
         } else {
-            textView.setBackgroundColor(viewGroup.context.getColor(R.color.white))
+            textView.setBackgroundColor(binding.root.context.getColor(R.color.white))
         }
     }
 

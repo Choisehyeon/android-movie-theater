@@ -3,18 +3,17 @@ package woowacourse.movie.activity.seat
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import woowacourse.movie.util.alarm.AlarmReceiver
-import woowacourse.movie.util.alarm.MovieAlarmManager
+import androidx.databinding.DataBindingUtil
 import woowacourse.movie.R
 import woowacourse.movie.activity.seat.contract.SeatSelectionActivityContract
 import woowacourse.movie.activity.seat.contract.presenter.SeatSelectionActivityPresenter
 import woowacourse.movie.activity.ticket.TicketActivity
 import woowacourse.movie.database.ReservationDatabase
 import woowacourse.movie.database.ReservationRepository
+import woowacourse.movie.databinding.ActivitySeatSelectionBinding
 import woowacourse.movie.dto.movie.BookingMovieUIModel
 import woowacourse.movie.dto.movie.MovieDateUIModel
 import woowacourse.movie.dto.movie.MovieTimeUIModel
@@ -24,6 +23,8 @@ import woowacourse.movie.dto.seat.SeatsUIModel
 import woowacourse.movie.dto.ticket.TicketCountUIModel
 import woowacourse.movie.mapper.seat.mapToDomain
 import woowacourse.movie.util.Extensions.intentSerializable
+import woowacourse.movie.util.alarm.AlarmReceiver
+import woowacourse.movie.util.alarm.MovieAlarmManager
 import woowacourse.movie.view.SeatSelectView
 
 class SeatSelectionActivity : AppCompatActivity(), SeatSelectionActivityContract.View {
@@ -38,6 +39,7 @@ class SeatSelectionActivity : AppCompatActivity(), SeatSelectionActivityContract
             ReservationRepository(ReservationDatabase.getDatabase(this)),
         )
     }
+    private lateinit var binding: ActivitySeatSelectionBinding
     private val date by lazy {
         intent.intentSerializable(DATE_KEY, MovieDateUIModel::class.java)
             ?: MovieDateUIModel.movieDate
@@ -55,7 +57,6 @@ class SeatSelectionActivity : AppCompatActivity(), SeatSelectionActivityContract
             TicketCountUIModel::class.java,
         ) ?: TicketCountUIModel(0)
     }
-    private val enterBtn by lazy { findViewById<TextView>(R.id.enterBtn) }
     private val movieAlarmManager by lazy { MovieAlarmManager(this) }
     private val alarmReceiver by lazy { AlarmReceiver() }
     private lateinit var seatSelectView: SeatSelectView
@@ -63,22 +64,21 @@ class SeatSelectionActivity : AppCompatActivity(), SeatSelectionActivityContract
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         registerReceiver(alarmReceiver, IntentFilter(AlarmReceiver.ALARM_CODE))
-        setContentView(R.layout.activity_seat_selection)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_seat_selection)
         setUpState(savedInstanceState)
         presenter.loadMovieTitle(movie.title)
     }
 
     override fun setUpSeatsView(seats: SeatsUIModel, onSeatClick: (SeatUIModel, Int, Int) -> Unit) {
         seatSelectView = SeatSelectView(
-            findViewById(R.id.seat_layout),
+            binding,
             onSeatClick,
             seats.mapToDomain(),
         )
     }
 
     override fun setMovieTitle(title: String) {
-        val movieTtile = findViewById<TextView>(R.id.movie_title)
-        movieTtile.text = title
+        binding.movieTitle.text = title
     }
 
     private fun setUpState(savedInstanceState: Bundle?) {
@@ -94,12 +94,11 @@ class SeatSelectionActivity : AppCompatActivity(), SeatSelectionActivityContract
     }
 
     override fun setEnterBtnColor(color: Int) {
-        enterBtn.setBackgroundColor(getColor(color))
+        binding.enterBtn.setBackgroundColor(getColor(color))
     }
 
     override fun setEnterBtnOnClickListener(listener: (() -> Unit)?) {
-        val enterBtn = findViewById<TextView>(R.id.enterBtn)
-        enterBtn.setOnClickListener {
+        binding.enterBtn.setOnClickListener {
             listener?.invoke()
         }
     }
@@ -140,8 +139,7 @@ class SeatSelectionActivity : AppCompatActivity(), SeatSelectionActivityContract
     }
 
     override fun setPrice(money: Int) {
-        val price = findViewById<TextView>(R.id.ticket_price)
-        price.text = getString(R.string.ticket_price_seat_page, money)
+        binding.ticketPrice.text = getString(R.string.ticket_price_seat_page, money)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

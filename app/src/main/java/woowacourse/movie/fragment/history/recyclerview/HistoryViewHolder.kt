@@ -1,9 +1,8 @@
 package woowacourse.movie.fragment.history.recyclerview
 
-import android.view.View
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import woowacourse.movie.R
+import woowacourse.movie.databinding.HistoryItemBinding
 import woowacourse.movie.dto.movie.BookingMovieUIModel
 import woowacourse.movie.dto.movie.MovieDateUIModel
 import woowacourse.movie.dto.movie.MovieTimeUIModel
@@ -11,30 +10,27 @@ import woowacourse.movie.util.listener.OnClickListener
 import java.time.format.DateTimeFormatter
 
 class HistoryViewHolder(
-    private val view: View,
+    private val binding: HistoryItemBinding,
     private val onItemViewClickListener: OnClickListener<Int>,
 ) :
-    RecyclerView.ViewHolder(view) {
-    private val reservationTime: TextView = itemView.findViewById(R.id.history_datetime)
-    private val reservationMovie: TextView = itemView.findViewById(R.id.history_title)
-
+    RecyclerView.ViewHolder(binding.root) {
     init {
-        view.setOnClickListener {
+        binding.root.setOnClickListener {
             onItemViewClickListener.onClick(absoluteAdapterPosition)
         }
     }
 
     fun bind(item: BookingMovieUIModel) {
-        reservationTime.text = formatMovieDateTime(item.date, item.time)
-        reservationMovie.text = item.movieTitle
+        binding.historyDatetime.text = formatMovieDateTime(item.date, item.time)
+        binding.historyTitle.text = item.movieTitle
     }
 
     private fun formatMovieDateTime(date: MovieDateUIModel, time: MovieTimeUIModel): String {
         val formatDate =
-            date.date.format(DateTimeFormatter.ofPattern(view.context.getString(R.string.date_format)))
+            date.date.format(DateTimeFormatter.ofPattern(binding.root.context.getString(R.string.date_format)))
         val formatTime =
-            time.time.format(DateTimeFormatter.ofPattern(view.context.getString(R.string.time_format)))
+            time.time.format(DateTimeFormatter.ofPattern(binding.root.context.getString(R.string.time_format)))
 
-        return view.context.getString(R.string.reservation_datetime, formatDate, formatTime)
+        return binding.root.context.getString(R.string.reservation_datetime, formatDate, formatTime)
     }
 }
