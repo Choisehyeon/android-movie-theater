@@ -9,4 +9,5 @@ data class BookingMovie(
     val time: MovieTime,
     val ticketCount: TicketCount,
     val seats: Seats,
+    val theater: String
 )

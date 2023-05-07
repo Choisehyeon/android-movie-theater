@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import woowacourse.movie.database.HistoryContract.TABLE_COLUMN_DATE
 import woowacourse.movie.database.HistoryContract.TABLE_COLUMN_MOVIE_TITLE
+import woowacourse.movie.database.HistoryContract.TABLE_COLUMN_THEATER_NAME
 import woowacourse.movie.database.HistoryContract.TABLE_COLUMN_TICKET_COUNT
 import woowacourse.movie.database.HistoryContract.TABLE_COLUMN_TIME
 import woowacourse.movie.database.SeatContract.TABLE_COLUMN_COL
@@ -36,7 +37,8 @@ class ReservationDBHelper(
             "$TABLE_COLUMN_MOVIE_TITLE TEXT," +
             "$TABLE_COLUMN_DATE TEXT," +
             "$TABLE_COLUMN_TIME TEXT," +
-            "$TABLE_COLUMN_TICKET_COUNT TEXT)"
+            "$TABLE_COLUMN_TICKET_COUNT TEXT, " +
+            "$TABLE_COLUMN_THEATER_NAME TEXT)"
         private const val SEAT_CREATE_QUERY = "CREATE TABLE $TABLE_NAME (" +
             "$TABLE_COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT," +
             "$TABLE_COLUMN_HISTORY_ID INTEGER," +

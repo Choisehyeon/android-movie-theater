@@ -61,9 +61,9 @@ class TicketActivity : AppCompatActivity(), TicketActivityContract.View {
         binding.ticketDate.text = formatMovieDateTime(date.date, time.time)
     }
 
-    override fun showTicketInfo(ticket: TicketCountUIModel, seats: SeatsUIModel) {
+    override fun showTicketInfo(ticket: TicketCountUIModel, seats: SeatsUIModel, theaterName: String) {
         binding.numberOfPeople.text =
-            getString(R.string.ticket_info, ticket.numberOfPeople, seats.getSeatsPositionToString())
+            getString(R.string.ticket_info, ticket.numberOfPeople, seats.getSeatsPositionToString(), theaterName)
     }
 
     override fun showTicketPrice(
