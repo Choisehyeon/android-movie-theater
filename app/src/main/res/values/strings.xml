@@ -9,7 +9,7 @@
     <string name="plus">+</string>
     <string name="select_seat">좌석 선택</string>
     <string name="ticket_message">영화 상영 시작 시간 15분 전까지\n 취소가 가능합니다.</string>
-    <string name="ticket_info">일반 %d명 | %s</string>
+    <string name="ticket_info">일반 %d명 | %s | %s 극장</string>
     <string name="ticket_price">%d원 (현장 결제)</string>
     <string name="ticket_price_seat_page">%d원</string>
     <string name="seats_size_over_error">지정한 좌석 수를 초과합니다.</string>
@@ -30,4 +30,5 @@
     <string name="notification_text">%s %d분 후에 상영</string>
     <string name="check_notification">권한이 있어야 알림 기능을 사용할 수 있습니다.</string>
     <string name="booker_people">1</string>
+    <string name="theater_schedule">%d개의 상영 시간</string>
 </resources>

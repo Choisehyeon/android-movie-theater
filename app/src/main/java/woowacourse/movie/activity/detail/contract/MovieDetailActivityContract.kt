@@ -4,6 +4,7 @@ import android.os.Bundle
 import woowacourse.movie.dto.movie.MovieDateUIModel
 import woowacourse.movie.dto.movie.MovieTimeUIModel
 import woowacourse.movie.dto.movie.MovieUIModel
+import woowacourse.movie.dto.movie.TheaterUIModel
 import woowacourse.movie.dto.ticket.TicketCountUIModel
 import java.time.LocalDate
 
@@ -39,6 +40,6 @@ interface MovieDetailActivityContract {
             time: String,
         )
         fun loadDateSpinnerData(startDate: LocalDate, endDate: LocalDate)
-        fun loadTimeSpinnerData(selectedDay: MovieDateUIModel)
+        fun loadTimeSpinnerData(movieId: Int, theater: TheaterUIModel)
     }
 }

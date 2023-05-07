@@ -71,6 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:gravity="center"
+            android:maxLines="1"
             android:text="@string/ticket_info"
             android:textColor="@color/black"
             android:textSize="25sp"

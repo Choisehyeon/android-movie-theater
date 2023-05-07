@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import woowacourse.movie.R
+import woowacourse.movie.activity.detail.MovieDetailActivity.Companion.THEATER_KEY
 import woowacourse.movie.activity.seat.contract.SeatSelectionActivityContract
 import woowacourse.movie.activity.seat.contract.presenter.SeatSelectionActivityPresenter
 import woowacourse.movie.activity.ticket.TicketActivity
@@ -18,6 +19,7 @@ import woowacourse.movie.dto.movie.BookingMovieUIModel
 import woowacourse.movie.dto.movie.MovieDateUIModel
 import woowacourse.movie.dto.movie.MovieTimeUIModel
 import woowacourse.movie.dto.movie.MovieUIModel
+import woowacourse.movie.dto.movie.TheaterUIModel
 import woowacourse.movie.dto.seat.SeatUIModel
 import woowacourse.movie.dto.seat.SeatsUIModel
 import woowacourse.movie.dto.ticket.TicketCountUIModel
@@ -36,6 +38,7 @@ class SeatSelectionActivity : AppCompatActivity(), SeatSelectionActivityContract
             date,
             time,
             movie,
+            theater,
             ReservationRepository(ReservationDatabase.getDatabase(this)),
         )
     }
@@ -56,6 +59,12 @@ class SeatSelectionActivity : AppCompatActivity(), SeatSelectionActivityContract
             TICKET_KEY,
             TicketCountUIModel::class.java,
         ) ?: TicketCountUIModel(0)
+    }
+    private val theater by lazy {
+        intent.intentSerializable(
+            THEATER_KEY,
+            TheaterUIModel::class.java,
+        ) ?: TheaterUIModel.theater
     }
     private val movieAlarmManager by lazy { MovieAlarmManager(this) }
     private val alarmReceiver by lazy { AlarmReceiver() }
