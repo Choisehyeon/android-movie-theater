@@ -8,6 +8,7 @@ import domain.screeningschedule.ReservationTime
 import woowacourse.movie.activity.detail.contract.MovieDetailActivityContract
 import woowacourse.movie.dto.movie.MovieDateUIModel
 import woowacourse.movie.dto.movie.MovieUIModel
+import woowacourse.movie.dto.movie.TheaterUIModel
 import woowacourse.movie.dto.ticket.TicketCountUIModel
 import woowacourse.movie.mapper.movie.mapToUIModel
 import woowacourse.movie.mapper.ticket.mapToDomain
@@ -57,8 +58,8 @@ class MovieDetailActivityPresenter(private val view: MovieDetailActivityContract
         view.setDateSpinnerData(data)
     }
 
-    override fun loadTimeSpinnerData(selectedDay: MovieDateUIModel) {
-        val data = ReservationTime(DayOfWeek.checkDayOfWeek(selectedDay.date)).getIntervalTimes()
-        view.setTimeSpinnerData(data)
+    override fun loadTimeSpinnerData(movieId: Int, theater: TheaterUIModel) {
+        val data = theater.screeningTime[movieId]
+        data?.let { view.setTimeSpinnerData(it) }
     }
 }
