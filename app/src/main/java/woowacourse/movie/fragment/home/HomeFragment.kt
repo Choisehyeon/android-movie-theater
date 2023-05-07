@@ -6,10 +6,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import woowacourse.movie.R
 import woowacourse.movie.activity.detail.MovieDetailActivity
+import woowacourse.movie.databinding.FragmentHomeBinding
 import woowacourse.movie.dto.movie.AdUIModel
 import woowacourse.movie.dto.movie.MovieUIModel
 import woowacourse.movie.fragment.home.contract.HomeFragmentContract
@@ -20,7 +22,7 @@ import woowacourse.movie.util.listener.OnClickListener
 class HomeFragment : Fragment(), HomeFragmentContract.View {
 
     override val presenter: HomeFragmentContract.Presenter by lazy { HomeFragmentPresenter(this) }
-    private val movieRV: RecyclerView by lazy { requireView().findViewById(R.id.movie_rv) }
+    private lateinit var binding: FragmentHomeBinding
     private lateinit var movieRecyclerViewAdatper: MovieRecyclerViewAdapter
 
     private val movieItemClick = object : OnClickListener<MovieUIModel> {
@@ -40,7 +42,8 @@ class HomeFragment : Fragment(), HomeFragmentContract.View {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,7 +57,7 @@ class HomeFragment : Fragment(), HomeFragmentContract.View {
             movieItemClick,
             adItemClick,
         )
-        movieRV.adapter = movieRecyclerViewAdatper
+        binding.movieRv.adapter = movieRecyclerViewAdatper
     }
 
     override fun showMovieDetail(data: MovieUIModel) {
