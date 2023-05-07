@@ -16,6 +16,7 @@ import woowacourse.movie.activity.detail.contract.presenter.MovieDetailActivityP
 import woowacourse.movie.dto.movie.MovieDateUIModel
 import woowacourse.movie.dto.movie.MovieTimeUIModel
 import woowacourse.movie.dto.movie.MovieUIModel
+import woowacourse.movie.dto.movie.TheaterUIModel
 import woowacourse.movie.dto.ticket.TicketCountUIModel
 import woowacourse.movie.mapper.movie.mapToUIModel
 import java.time.LocalDate
@@ -137,14 +138,31 @@ class MovieDetailPresenterTest {
 
     @Test
     fun `timeSpinner에 data가 잘 로드되는지 확인`() {
-        val selectedDate = MovieDate.of("2023-05-06").mapToUIModel()
-        val expected: List<String> = listOf("09:00", "11:00", "13:00", "15:00", "17:00", "19:00", "21:00", "23:00")
+        val expected: List<String> = listOf("9:00", "11:00", "15:00")
         val slot = slot<List<String>>()
         every { view.setTimeSpinnerData(capture(slot)) } just Runs
 
-        presenter.loadTimeSpinnerData(selectedDate)
+        presenter.loadTimeSpinnerData(fakeMovie.id, fakeTheater)
 
         assertEquals(expected, slot.captured)
         verify { view.setTimeSpinnerData(slot.captured) }
+    }
+
+    companion object {
+        private val fakeMovie = MovieUIModel(
+            id = 1,
+            title = "",
+            startDate = LocalDate.now(),
+            endDate = LocalDate.now(),
+            runningTime = 0,
+            description = "",
+            moviePoster = 0,
+        )
+        private val fakeTheater = TheaterUIModel(
+            name = "",
+            screeningTime = mapOf(
+                1 to listOf("9:00", "11:00", "15:00"),
+            ),
+        )
     }
 }
