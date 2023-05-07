@@ -9,6 +9,7 @@ data class BookingMovieUIModel(
     val time: MovieTimeUIModel,
     val ticketCount: TicketCountUIModel,
     val seats: SeatsUIModel,
+    val theaterName: String,
 ) : java.io.Serializable {
     companion object {
         val bookingMovie = BookingMovieUIModel(
@@ -17,6 +18,7 @@ data class BookingMovieUIModel(
             time = MovieTimeUIModel.movieTime,
             ticketCount = TicketCountUIModel(0),
             seats = SeatsUIModel(),
+            theaterName = "",
         )
     }
 }
