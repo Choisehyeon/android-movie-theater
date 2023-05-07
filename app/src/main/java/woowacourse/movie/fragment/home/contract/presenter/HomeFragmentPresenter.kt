@@ -15,7 +15,6 @@ class HomeFragmentPresenter(val view: HomeFragmentContract.View, val repository:
 
     override fun onMovieItemClick(item: MovieUIModel) {
         val theaters = loadTheaters(item)
-        Log.d("theaters", theaters.toString())
         view.showTheaterFragment(item, theaters)
     }
 

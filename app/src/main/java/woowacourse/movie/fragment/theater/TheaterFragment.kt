@@ -30,7 +30,6 @@ class TheaterFragment(val movie: MovieUIModel, private val theaters: List<Theate
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.d("theaters2", theaters.toString())
         val theaterRecyclerView = view.findViewById<RecyclerView>(R.id.theater_recyclerview)
         theaterRecyclerViewAdapter = TheaterRecyclerViewAdapter(
             movie,
