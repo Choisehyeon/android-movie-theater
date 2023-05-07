@@ -5,10 +5,12 @@ import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.databinding.DataBindingUtil
 import woowacourse.movie.R
 import woowacourse.movie.activity.ticket.contract.TicketActivityContract
 import woowacourse.movie.activity.ticket.contract.presenter.TicketActivityPresenter
 import woowacourse.movie.activity.seat.SeatSelectionActivity
+import woowacourse.movie.databinding.ActivityTicketBinding
 import woowacourse.movie.dto.movie.BookingMovieUIModel
 import woowacourse.movie.dto.movie.MovieDateUIModel
 import woowacourse.movie.dto.movie.MovieTimeUIModel
@@ -24,9 +26,10 @@ import java.time.format.DateTimeFormatter
 class TicketActivity : AppCompatActivity(), TicketActivityContract.View {
 
     override val presenter: TicketActivityContract.Presenter by lazy { TicketActivityPresenter(this) }
+    private lateinit var binding: ActivityTicketBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_ticket)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_ticket)
         setToolbar()
         val bookingMovie =
             intent.intentSerializable(
@@ -38,9 +41,7 @@ class TicketActivity : AppCompatActivity(), TicketActivityContract.View {
     }
 
     override fun setToolbar() {
-        val toolbar = findViewById<Toolbar>(R.id.ticket_toolbar)
-
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.ticketToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
@@ -56,15 +57,12 @@ class TicketActivity : AppCompatActivity(), TicketActivityContract.View {
         date: MovieDateUIModel,
         time: MovieTimeUIModel,
     ) {
-        val movieTitle = findViewById<TextView>(R.id.ticket_title)
-        val movieDate = findViewById<TextView>(R.id.ticket_date)
-        movieTitle.text = title
-        movieDate.text = formatMovieDateTime(date.date, time.time)
+        binding.ticketTitle.text = title
+        binding.ticketDate.text = formatMovieDateTime(date.date, time.time)
     }
 
     override fun showTicketInfo(ticket: TicketCountUIModel, seats: SeatsUIModel) {
-        val numberOfPeople = findViewById<TextView>(R.id.number_of_people)
-        numberOfPeople.text =
+        binding.numberOfPeople.text =
             getString(R.string.ticket_info, ticket.numberOfPeople, seats.getSeatsPositionToString())
     }
 
@@ -73,11 +71,10 @@ class TicketActivity : AppCompatActivity(), TicketActivityContract.View {
         date: MovieDateUIModel,
         time: MovieTimeUIModel,
     ) {
-        val price = findViewById<TextView>(R.id.ticket_price)
         val totalTicketPrice =
             seats.mapToDomain().caculateSeatPrice(LocalDateTime.of(date.date, time.time))
 
-        price.text = getString(R.string.ticket_price, totalTicketPrice)
+        binding.ticketPrice.text = getString(R.string.ticket_price, totalTicketPrice)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -6,17 +6,14 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.Spinner
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import androidx.databinding.DataBindingUtil
 import domain.movieinfo.MovieDate
 import woowacourse.movie.R
 import woowacourse.movie.activity.detail.contract.MovieDetailActivityContract
 import woowacourse.movie.activity.detail.contract.presenter.MovieDetailActivityPresenter
 import woowacourse.movie.activity.seat.SeatSelectionActivity
+import woowacourse.movie.databinding.ActivityMovieDetailBinding
 import woowacourse.movie.dto.movie.MovieDateUIModel
 import woowacourse.movie.dto.movie.MovieTimeUIModel
 import woowacourse.movie.dto.movie.MovieUIModel
@@ -33,15 +30,12 @@ class MovieDetailActivity : AppCompatActivity(), MovieDetailActivityContract.Vie
             this,
         )
     }
+    private lateinit var binding: ActivityMovieDetailBinding
     private var dateSpinnerPosition = 0
     private var timeSpinnerPosition = 0
-
-    private val selectDateSpinner by lazy { findViewById<Spinner>(R.id.select_date) }
-    private val selectTimeSpinner by lazy { findViewById<Spinner>(R.id.select_time) }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_movie_detail)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_movie_detail)
 
         setToolBar()
         setUpState(savedInstanceState)
@@ -64,34 +58,25 @@ class MovieDetailActivity : AppCompatActivity(), MovieDetailActivityContract.Vie
     }
 
     override fun setToolBar() {
-        val toolbar = findViewById<Toolbar>(R.id.movie_detail_toolbar)
-
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.movieDetailToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun setMovieData(movie: MovieUIModel) {
-        val moviePoster = findViewById<ImageView>(R.id.movie_poster)
-        val movieTitle = findViewById<TextView>(R.id.movie_title)
-        val movieDate = findViewById<TextView>(R.id.movie_date)
-        val runningTime = findViewById<TextView>(R.id.movie_time)
-        val description = findViewById<TextView>(R.id.movie_description)
+        binding.moviePoster.setImageResource(movie.moviePoster)
+        binding.movieTitle.text = movie.title
 
-        moviePoster.setImageResource(movie.moviePoster)
-        movieTitle.text = movie.title
-
-        movieDate.text = formatMovieRunningDate(movie)
-
-        runningTime.text = getString(R.string.movie_running_time).format(movie.runningTime)
-        description.text = movie.description
+        binding.movieDate.text = formatMovieRunningDate(movie)
+        binding.movieTime.text = getString(R.string.movie_running_time).format(movie.runningTime)
+        binding.movieDescription.text = movie.description
     }
 
     override fun setDateSpinnerPosition(dateSpinnerPosition: Int) {
-        selectDateSpinner.setSelection(dateSpinnerPosition)
+        binding.selectDate.setSelection(dateSpinnerPosition)
     }
 
     override fun setTimeSpinnerPosition(timeSpinnerPosition: Int) {
-        selectTimeSpinner.setSelection(timeSpinnerPosition)
+        binding.selectTime.setSelection(timeSpinnerPosition)
     }
 
     override fun formatMovieRunningDate(item: MovieUIModel): String {
@@ -103,8 +88,7 @@ class MovieDetailActivity : AppCompatActivity(), MovieDetailActivityContract.Vie
     }
 
     override fun setBookerNumber(number: TicketCountUIModel) {
-        val booker = findViewById<TextView>(R.id.booker_num)
-        booker.text = number.numberOfPeople.toString()
+        binding.bookerNum.text = number.numberOfPeople.toString()
     }
 
     override fun showSeatSelectPage(
@@ -130,7 +114,7 @@ class MovieDetailActivity : AppCompatActivity(), MovieDetailActivityContract.Vie
         )
         dateAdapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item)
 
-        selectDateSpinner.adapter = dateAdapter
+        binding.selectDate.adapter = dateAdapter
     }
 
     override fun setTimeSpinnerData(data: List<String>) {
@@ -141,33 +125,27 @@ class MovieDetailActivity : AppCompatActivity(), MovieDetailActivityContract.Vie
         )
 
         timeAdapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item)
-        selectTimeSpinner.adapter = timeAdapter
+        binding.selectTime.adapter = timeAdapter
     }
 
     private fun onClickDecreaseBtnListener() {
-        val minusBtn = findViewById<Button>(R.id.minus_button)
-
-        minusBtn.setOnClickListener {
+        binding.minusButton.setOnClickListener {
             presenter.decreaseNum()
         }
     }
 
     private fun onClickIncreaseBtnListener() {
-        val plusBtn = findViewById<Button>(R.id.plus_button)
-
-        plusBtn.setOnClickListener {
+        binding.plusButton.setOnClickListener {
             presenter.increaseNum()
         }
     }
 
     private fun onClickBookBtnListener(movie: MovieUIModel) {
-        val bookBtn = findViewById<Button>(R.id.book_button)
-
-        bookBtn.setOnClickListener {
+        binding.bookButton.setOnClickListener {
             presenter.onBookBtnClick(
                 movie,
-                selectDateSpinner.selectedItem.toString(),
-                selectTimeSpinner.selectedItem.toString(),
+                binding.selectDate.selectedItem.toString(),
+                binding.selectTime.selectedItem.toString(),
             )
         }
     }
@@ -185,7 +163,7 @@ class MovieDetailActivity : AppCompatActivity(), MovieDetailActivityContract.Vie
     private fun selectDateSpinner(startDate: LocalDate, endDate: LocalDate) {
         presenter.loadDateSpinnerData(startDate, endDate)
         presenter.loadDateSpinnerPosition(dateSpinnerPosition)
-        selectDateSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.selectDate.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
                 view: View?,
@@ -193,7 +171,7 @@ class MovieDetailActivity : AppCompatActivity(), MovieDetailActivityContract.Vie
                 id: Long,
             ) {
                 selectTimeSpinner(
-                    MovieDate.of(selectDateSpinner.getItemAtPosition(position) as String)
+                    MovieDate.of(binding.selectDate.getItemAtPosition(position) as String)
                         .mapToUIModel(),
                 )
             }
@@ -206,7 +184,7 @@ class MovieDetailActivity : AppCompatActivity(), MovieDetailActivityContract.Vie
         presenter.loadTimeSpinnerData(selectedDay)
         presenter.loadTimeSpinnerPosition(timeSpinnerPosition)
 
-        selectTimeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.selectTime.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
                 view: View?,

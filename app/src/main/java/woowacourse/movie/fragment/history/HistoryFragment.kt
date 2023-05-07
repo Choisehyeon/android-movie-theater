@@ -5,12 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
 import woowacourse.movie.R
 import woowacourse.movie.activity.ticket.TicketActivity
 import woowacourse.movie.database.ReservationDatabase
 import woowacourse.movie.database.ReservationRepository
+import woowacourse.movie.databinding.FragmentHistoryBinding
 import woowacourse.movie.dto.movie.BookingMovieUIModel
 import woowacourse.movie.fragment.history.contract.HistoryFragmentContract
 import woowacourse.movie.fragment.history.contract.presenter.HistoryFragmentPresenter
@@ -25,7 +26,7 @@ class HistoryFragment : Fragment(), HistoryFragmentContract.View {
             ReservationRepository(ReservationDatabase.getDatabase(requireContext())),
         )
     }
-    private val historyRecyclerView: RecyclerView by lazy { requireView().findViewById(R.id.history_rv) }
+    private lateinit var binding: FragmentHistoryBinding
     private lateinit var historyRVAdapter: HistoryRecyclerViewAdapter
 
     private val onItemClick = object : OnClickListener<BookingMovieUIModel> {
@@ -39,7 +40,8 @@ class HistoryFragment : Fragment(), HistoryFragmentContract.View {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        return inflater.inflate(R.layout.fragment_history, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_history, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,7 +54,7 @@ class HistoryFragment : Fragment(), HistoryFragmentContract.View {
             listOf(),
             onItemClick,
         )
-        historyRecyclerView.adapter = historyRVAdapter
+        binding.historyRv.adapter = historyRVAdapter
     }
 
     override fun updateRecyclerView(histories: List<BookingMovieUIModel>) {
