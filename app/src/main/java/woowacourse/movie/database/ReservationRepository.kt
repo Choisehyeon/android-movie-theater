@@ -9,6 +9,7 @@ import domain.movieinfo.MovieTime
 import woowacourse.movie.database.HistoryContract.TABLE_COLUMN_DATE
 import woowacourse.movie.database.HistoryContract.TABLE_COLUMN_ID
 import woowacourse.movie.database.HistoryContract.TABLE_COLUMN_MOVIE_TITLE
+import woowacourse.movie.database.HistoryContract.TABLE_COLUMN_THEATER_NAME
 import woowacourse.movie.database.HistoryContract.TABLE_COLUMN_TICKET_COUNT
 import woowacourse.movie.database.HistoryContract.TABLE_COLUMN_TIME
 import woowacourse.movie.database.SeatContract.TABLE_COLUMN_COL
@@ -35,6 +36,7 @@ class ReservationRepository(val database: SQLiteDatabase) {
             put(TABLE_COLUMN_DATE, item.date.toString())
             put(TABLE_COLUMN_TIME, item.time.toString())
             put(TABLE_COLUMN_TICKET_COUNT, item.ticketCount.numberOfPeople)
+            put(TABLE_COLUMN_THEATER_NAME, item.theaterName)
         }
         return database.insert(HistoryContract.TABLE_NAME, null, history)
     }
@@ -58,7 +60,7 @@ class ReservationRepository(val database: SQLiteDatabase) {
     fun getAll(): List<BookingMovieUIModel> {
         val histories = mutableListOf<BookingMovieUIModel>()
         getHistoryAll().use {
-            while(it.moveToNext()) {
+            while (it.moveToNext()) {
                 histories.add(getHistory(it))
             }
         }
@@ -72,6 +74,7 @@ class ReservationRepository(val database: SQLiteDatabase) {
         val time = cursor.getString(cursor.getColumnIndex(TABLE_COLUMN_TIME))
         val ticketCount = cursor.getInt(cursor.getColumnIndex(TABLE_COLUMN_TICKET_COUNT))
         val historyId = cursor.getInt(cursor.getColumnIndex(TABLE_COLUMN_ID))
+        val theaterName = cursor.getString(cursor.getColumnIndex(TABLE_COLUMN_THEATER_NAME))
         val seats = getSeats(historyId)
         return BookingMovieUIModel(
             movieTitle,
@@ -79,6 +82,7 @@ class ReservationRepository(val database: SQLiteDatabase) {
             MovieTime.of(time).mapToUIModel(),
             TicketCountUIModel(ticketCount),
             seats,
+            theaterName,
         )
     }
 
