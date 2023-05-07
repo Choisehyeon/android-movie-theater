@@ -16,7 +16,7 @@ interface TicketActivityContract {
         fun setToolbar()
 
         fun formatMovieDateTime(date: LocalDate, time: LocalTime): String
-        fun showTicketInfo(title: String, date: MovieDateUIModel, time: MovieTimeUIModel)
+        fun showTicketMovieInfo(title: String, date: MovieDateUIModel, time: MovieTimeUIModel)
         fun showTicketInfo(ticket: TicketCountUIModel, seats: SeatsUIModel, theaterName: String)
         fun showTicketPrice(seats: SeatsUIModel, date: MovieDateUIModel, time: MovieTimeUIModel)
     }

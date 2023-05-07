@@ -52,7 +52,7 @@ class TicketActivity : AppCompatActivity(), TicketActivityContract.View {
         return formatDate.plus(" $formatTime")
     }
 
-    override fun showTicketInfo(
+    override fun showTicketMovieInfo(
         title: String,
         date: MovieDateUIModel,
         time: MovieTimeUIModel,
