@@ -8,20 +8,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
 import woowacourse.movie.R
-import woowacourse.movie.activity.detail.MovieDetailActivity
+import woowacourse.movie.database.TheaterRepository
 import woowacourse.movie.databinding.FragmentHomeBinding
 import woowacourse.movie.dto.movie.AdUIModel
 import woowacourse.movie.dto.movie.MovieUIModel
+import woowacourse.movie.dto.movie.TheaterDummy
+import woowacourse.movie.dto.movie.TheaterUIModel
 import woowacourse.movie.fragment.home.contract.HomeFragmentContract
 import woowacourse.movie.fragment.home.contract.presenter.HomeFragmentPresenter
 import woowacourse.movie.fragment.home.recyclerview.MovieRecyclerViewAdapter
+import woowacourse.movie.fragment.theater.TheaterFragment
 import woowacourse.movie.util.listener.OnClickListener
 
 class HomeFragment : Fragment(), HomeFragmentContract.View {
 
-    override val presenter: HomeFragmentContract.Presenter by lazy { HomeFragmentPresenter(this) }
+    override val presenter: HomeFragmentContract.Presenter by lazy {
+        HomeFragmentPresenter(
+            this,
+            TheaterRepository(TheaterDummy.theaterDatas),
+        )
+    }
     private lateinit var binding: FragmentHomeBinding
     private lateinit var movieRecyclerViewAdatper: MovieRecyclerViewAdapter
 
@@ -60,10 +67,9 @@ class HomeFragment : Fragment(), HomeFragmentContract.View {
         binding.movieRv.adapter = movieRecyclerViewAdatper
     }
 
-    override fun showMovieDetail(data: MovieUIModel) {
-        val intent = Intent(context, MovieDetailActivity::class.java)
-        intent.putExtra(MOVIE_KEY, data)
-        startActivity(intent)
+    override fun showTheaterFragment(movie: MovieUIModel, theaters: List<TheaterUIModel>) {
+        val theaterFragment = TheaterFragment(movie, theaters)
+        theaterFragment.show(childFragmentManager, TheaterFragment.TAG)
     }
 
     override fun showAd(data: AdUIModel) {

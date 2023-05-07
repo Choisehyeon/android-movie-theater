@@ -17,6 +17,7 @@ import woowacourse.movie.databinding.ActivityMovieDetailBinding
 import woowacourse.movie.dto.movie.MovieDateUIModel
 import woowacourse.movie.dto.movie.MovieTimeUIModel
 import woowacourse.movie.dto.movie.MovieUIModel
+import woowacourse.movie.dto.movie.TheaterUIModel
 import woowacourse.movie.dto.ticket.TicketCountUIModel
 import woowacourse.movie.mapper.movie.mapToUIModel
 import woowacourse.movie.util.Extensions.intentSerializable
@@ -33,15 +34,22 @@ class MovieDetailActivity : AppCompatActivity(), MovieDetailActivityContract.Vie
     private lateinit var binding: ActivityMovieDetailBinding
     private var dateSpinnerPosition = 0
     private var timeSpinnerPosition = 0
+    private val movie by lazy {
+        intent.intentSerializable(MOVIE_KEY, MovieUIModel::class.java) ?: MovieUIModel.movieData
+    }
+    private val theater by lazy {
+        intent.intentSerializable(
+            THEATER_KEY,
+            TheaterUIModel::class.java,
+        ) ?: TheaterUIModel.theater
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_movie_detail)
 
         setToolBar()
         setUpState(savedInstanceState)
-
-        val movie =
-            intent.intentSerializable(MOVIE_KEY, MovieUIModel::class.java) ?: MovieUIModel.movieData
 
         selectDateSpinner(movie.startDate, movie.endDate)
         presenter.loadMovieData(movie)
@@ -99,6 +107,7 @@ class MovieDetailActivity : AppCompatActivity(), MovieDetailActivityContract.Vie
     ) {
         val intent = Intent(this, SeatSelectionActivity::class.java)
         intent.putExtra(TICKET_KEY, count)
+        intent.putExtra(THEATER_KEY, theater)
         intent.putExtra(MOVIE_KEY, data)
         intent.putExtra(DATE_KEY, date)
         intent.putExtra(TIME_KEY, time)
@@ -170,18 +179,15 @@ class MovieDetailActivity : AppCompatActivity(), MovieDetailActivityContract.Vie
                 position: Int,
                 id: Long,
             ) {
-                selectTimeSpinner(
-                    MovieDate.of(binding.selectDate.getItemAtPosition(position) as String)
-                        .mapToUIModel(),
-                )
+                selectTimeSpinner()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
 
-    private fun selectTimeSpinner(selectedDay: MovieDateUIModel) {
-        presenter.loadTimeSpinnerData(selectedDay)
+    private fun selectTimeSpinner() {
+        presenter.loadTimeSpinnerData(movie.id, theater)
         presenter.loadTimeSpinnerPosition(timeSpinnerPosition)
 
         binding.selectTime.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -206,6 +212,7 @@ class MovieDetailActivity : AppCompatActivity(), MovieDetailActivityContract.Vie
 
     companion object {
         private const val TICKET_KEY = "ticket"
+        const val THEATER_KEY = "theater"
         private const val MOVIE_KEY = "movie"
         private const val DATE_KEY = "movie_date"
         private const val TIME_KEY = "movie_time"
