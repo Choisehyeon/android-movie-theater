@@ -2,7 +2,6 @@ package woowacourse.movie.view
 
 import android.util.TypedValue
 import android.view.Gravity
-import android.view.ViewGroup
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
@@ -14,8 +13,8 @@ import domain.Seats
 import woowacourse.movie.R
 import woowacourse.movie.databinding.ActivitySeatSelectionBinding
 import woowacourse.movie.dto.seat.SeatColUIModel
-import woowacourse.movie.dto.seat.SeatUIModel
 import woowacourse.movie.dto.seat.SeatRowUIModel
+import woowacourse.movie.dto.seat.SeatUIModel
 import woowacourse.movie.mapper.seat.mapToDomain
 import woowacourse.movie.mapper.seat.mapToUIModel
 

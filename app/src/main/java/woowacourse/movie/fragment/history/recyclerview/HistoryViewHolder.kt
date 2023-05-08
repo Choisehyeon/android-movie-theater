@@ -15,17 +15,17 @@ class HistoryViewHolder(
 ) :
     RecyclerView.ViewHolder(binding.root) {
     init {
+        binding.view = this
         binding.root.setOnClickListener {
             onItemViewClickListener.onClick(absoluteAdapterPosition)
         }
     }
 
     fun bind(item: BookingMovieUIModel) {
-        binding.historyDatetime.text = formatMovieDateTime(item.date, item.time)
-        binding.historyTitle.text = item.movieTitle
+        binding.history = item
     }
 
-    private fun formatMovieDateTime(date: MovieDateUIModel, time: MovieTimeUIModel): String {
+    fun formatMovieDateTime(date: MovieDateUIModel, time: MovieTimeUIModel): String {
         val formatDate =
             date.date.format(DateTimeFormatter.ofPattern(binding.root.context.getString(R.string.date_format)))
         val formatTime =

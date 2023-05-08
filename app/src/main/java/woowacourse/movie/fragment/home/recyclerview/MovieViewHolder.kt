@@ -14,6 +14,7 @@ class MovieViewHolder(
     RecyclerView.ViewHolder(binding.root) {
 
     init {
+        binding.view = this
         binding.bookButton.setOnClickListener {
             onItemClickListener.onClick(adapterPosition)
         }
@@ -21,12 +22,10 @@ class MovieViewHolder(
 
     fun bind(movie: MovieUIModel) {
         binding.moviePoster.setImageResource(movie.moviePoster)
-        binding.movieTitle.text = movie.title
-        binding.movieDate.text = formatMovieRunningDate(movie)
-        binding.runningTime.text = formatMovieRunningTime(movie)
+        binding.movie = movie
     }
 
-    private fun formatMovieRunningDate(item: MovieUIModel): String {
+    fun formatMovieRunningDate(item: MovieUIModel): String {
         val startDate =
             item.startDate.format(DateTimeFormatter.ofPattern(binding.root.context.getString(R.string.date_format)))
         val endDate =
@@ -34,7 +33,7 @@ class MovieViewHolder(
         return binding.root.context.getString(R.string.movie_running_date, startDate, endDate)
     }
 
-    private fun formatMovieRunningTime(item: MovieUIModel): String {
+    fun formatMovieRunningTime(item: MovieUIModel): String {
         return binding.root.context.getString(R.string.movie_running_time).format(item.runningTime)
     }
 }

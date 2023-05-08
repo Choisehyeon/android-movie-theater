@@ -3,6 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="history"
+            type="woowacourse.movie.dto.movie.BookingMovieUIModel" />
+
+        <variable
+            name="view"
+            type="woowacourse.movie.fragment.history.recyclerview.HistoryViewHolder" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,6 +29,7 @@
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:text="@{view.formatMovieDateTime(history.date, history.time) }"
             tools:text="2024.3.2 | 17:00" />
 
         <TextView
@@ -28,7 +39,7 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="12.27dp"
-            android:text="TextView"
+            android:text="@{history.movieTitle}"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"

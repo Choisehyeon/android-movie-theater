@@ -4,6 +4,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="theater"
+            type="woowacourse.movie.dto.movie.TheaterUIModel" />
+        
+        <variable
+            name="movieId"
+            type="int" />
+
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,6 +30,7 @@
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:text="@{theater.name}"
             tools:text="극장이름" />
 
         <TextView
@@ -30,6 +42,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/theater_name"
+            android:text = "@{ @string/theater_schedule(theater.screeningTime[movieId].size) }"
             tools:text="3개의 상영 시간" />
 
         <ImageView
